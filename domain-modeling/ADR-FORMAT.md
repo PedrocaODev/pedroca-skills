@@ -6,13 +6,34 @@ Create the `docs/adr/` directory lazily — only when the first ADR is needed.
 
 ## Template
 
-```md
-# {Short title of the decision}
+```markdown
+---
+id: adr-NNNN-<slug>
+title: "Short title of the decision"
+type: Decision
+status: active
+valid_from: YYYY-MM-DD
+artifact: adr
+scope:
+  system: pedroca-skills
+  env: production
+relations: [] # or - type: supersedes, target: ../adr/NNNN-<old>.md
+tags:
+  - architecture
+  - adr
+---
+
+# Short title of the decision
 
 {1-3 sentences: what's the context, what did we decide, and why.}
 ```
 
-That's it. An ADR can be a single paragraph. The value is in recording *that* a decision was made and *why* — not in filling out sections.
+You can scaffold this automatically with the CLI helper command:
+```bash
+python3 setup-pedroca-skills/scripts/okf_bootstrap.py adr --slug <slug> --title "<title>" --number <N> [--supersedes <target>]
+```
+
+That's it. An ADR can be a single paragraph. The value is in recording *that* a decision was made and *why* — not in filling out sections. Scaffolding with `okf_bootstrap.py` ensures the OKF v0.2 frontmatter satisfies `akashic lint --strict`.
 
 ## Optional sections
 
