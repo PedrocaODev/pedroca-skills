@@ -37,7 +37,9 @@ If a `CONTEXT-MAP.md` exists at the root, the repo has multiple contexts. The ma
 │       └── docs/adr/
 ```
 
-Create files lazily — only when you have something to write. If no `CONTEXT.md` exists, create one when the first term is resolved. If no `docs/adr/` exists, create it when the first ADR is needed.
+Create files lazily — only when you have something to write. If no `CONTEXT.md` exists, create one when the first term is resolved to capture ubiquitous language. If no `docs/adr/` exists, create it when the first ADR is needed. If `config/akashic.toml` is missing, run `/setup-pedroca-skills` first.
+
+Architectural decisions are recorded into `docs/adr/NNNN-<slug>.md` using `setup-pedroca-skills/scripts/okf_bootstrap.py adr` to scaffold OKF v0.2 `Decision` (`artifact: adr`) frontmatter so they pass `akashic lint --strict`. Resolved terms are captured in `CONTEXT.md`.
 
 ## During the session
 
