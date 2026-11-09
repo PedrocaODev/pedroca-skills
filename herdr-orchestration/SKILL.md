@@ -12,7 +12,7 @@ Coordinate parallel engineering initiatives across isolated Git worktrees groupe
 
 1. **Two-Tier Agent Model**:
    - **Tier 1 (Herdr Multiplexer)**: Owns process isolation, terminal panes, Git worktree lifecycles, and agent process state (`working`, `idle`, `done`, `blocked`).
-   - **Tier 2 (In-Session Subagents & Lanes)**: Worker agents operate strictly inside their dedicated worktrees, emitting structured artifacts without context bleeding.
+   - **Tier 2 (In-Session Specialist Subagents & Lanes)**: Each Lane runs an Antigravity agent that delegates bounded work to in-session Specialist Subagents (`fixer`, `craftsman`, `runner`, `integrator`), operating strictly inside their dedicated worktrees and emitting structured artifacts without context bleeding.
 2. **Hierarchical Worktree Spaces in Herdr SPACES Sidebar**:
    - Lanes are provisioned as native Git worktrees grouped under the target repository's Space in Herdr's SPACES sidebar.
    - In Herdr's TUI, the SPACES sidebar displays a hierarchical tree:
@@ -25,11 +25,11 @@ Coordinate parallel engineering initiatives across isolated Git worktrees groupe
      ```
    - Each lane gets dedicated workspace isolation (independent terminal layout, panes, and working directory) while maintaining clear visual hierarchy under the parent repository space.
 3. **Artifact-First Two-Way Handoff**:
-   - The orchestrator never absorbs raw worker conversation turns or verbose build logs.
-   - State is transferred via kickoff briefs (`/tmp/handoff-<session>-<lane>.md`) and completion receipts (`/tmp/handoff-<session>-<lane>-result.md`).
+   - The orchestrator never absorbs raw Lane agent conversation turns or verbose build logs.
+   - State is transferred via Kickoff Briefs (`/tmp/handoff-<session>-<lane>.md`) and Completion Receipts (`/tmp/handoff-<session>-<lane>-result.md`).
 4. **Fail-Safe Verification Gates**:
-   - **Stage 1 (Self-Verification)**: Each lane agent tests its own code inside its worktree before reporting completion. Bounded remediation (max 2 retries) handles self-healing.
-   - **Stage 2 (Integration Verification)**: The orchestrator validates the combined changeset on a dedicated integration branch before delivery.
+   - **Stage 1 Verification Gate (Lane Self-Verification)**: Each Lane agent tests its own code inside its worktree before reporting completion. Bounded remediation (max 2 retries) handles self-healing.
+   - **Stage 2 Verification Gate (Integration Verification)**: The orchestrator validates the combined changeset on a dedicated integration branch before delivery.
 
 ---
 
@@ -109,17 +109,23 @@ echo "Initialized Orchestration Session: topic=${TOPIC} session=${SESSION_ID} ba
 
 Decompose the feature or specification into discrete, parallelizable workstreams structured as a Directed Acyclic Graph (DAG).
 
-### 1.1 Dual-Mode Lane Planning
+### 1.1 Multi-Mode Lane Planning
 
-Operate in one of two modes:
+Operate in one of three modes:
 
-#### Mode A: User-Specified Lanes
+#### Mode A: Compiled Ticket DAG (from `/to-tickets`)
+When `/to-tickets` has compiled tickets for a spec or initiative:
+- `/to-tickets` outputs a compiled Ticket DAG that can be loaded directly using `LaneOrchestrator.load_dag(...)` (from a dictionary or a JSON file path like `/tmp/dag-${SESSION_ID}.json` or ticket metadata in `docs/tickets/...`).
+- Ticket dependencies, file scopes, and verification tests map directly into `LaneConfig` phases.
+- Bypasses manual phase/lane definition and guarantees consistency with spec acceptance criteria and tracer-bullet boundaries.
+
+#### Mode B: User-Specified Lanes
 If the user provided explicit lane names or definitions in the prompt or arguments:
 - Parse user-provided lanes (e.g., `backend`, `frontend`, `contracts`, `docs`).
 - Map each lane to its bounded responsibility and file paths.
 - Establish dependency ordering between lanes.
 
-#### Mode B: Automatic Interactive Decomposition
+#### Mode C: Automatic Interactive Decomposition
 If the user supplied an objective, plan, or spec without lane definitions:
 1. Analyze the target specification or requirement.
 2. Group tasks by architectural layers and file boundaries:
@@ -134,7 +140,7 @@ If the user supplied an objective, plan, or spec without lane definitions:
 4. **Interactive Confirmation**: Present the proposed DAG, lane names, file boundaries, and execution phases to the user for confirmation before proceeding.
 
 ### 1.2 DAG Data Schema
-Represent the plan in memory or in `/tmp/dag-${SESSION_ID}.json`. The schema corresponds directly to `LaneConfig` and `LaneType` defined in [`subagent/orchestrator.py`](subagent/orchestrator.py):
+Represent the plan in memory or in `/tmp/dag-${SESSION_ID}.json`. `LaneOrchestrator.load_dag(...)` validates and parses this schema into structured `LaneConfig` and `LaneType` objects defined in [`subagent/orchestrator.py`](subagent/orchestrator.py):
 
 ```json
 {
@@ -192,10 +198,10 @@ Represent the plan in memory or in `/tmp/dag-${SESSION_ID}.json`. The schema cor
 
 Lane fields (matching `LaneConfig` in [`subagent/orchestrator.py`](subagent/orchestrator.py)):
 - `name`: Unique identifier for the lane.
-- `type`: Workstream classification — one of `implementation`, `docs`, `research`, or `chore` (`LaneType`). Implementation lanes (where `LaneOrchestrator.is_implementation_lane(lane)` evaluates to true: `lane_type == LaneType.IMPLEMENTATION` or `"implement"` in `required_skills`) mandate `/implement` workflow enforcement, TDD, code review, and receipt gate validation.
+- `type`: Workstream classification — one of `implementation`, `docs`, `research`, or `chore` (`LaneType`). Implementation lanes (where `LaneOrchestrator.is_implementation_lane(lane)` evaluates to true: `lane_type == LaneType.IMPLEMENTATION` or `"implement"` in `required_skills`) mandate `/implement` workflow enforcement, TDD, code review, and Completion Receipt Verification Gate validation.
 - `description`: Bounded responsibility and deliverable.
 - `paths`: Strictly bounded file paths/patterns the lane is authorized to mutate.
-- `dependencies`: Prerequisite lane names whose receipts must be provided.
+- `dependencies`: Prerequisite lane names whose Completion Receipts must be provided.
 - `stage1_test`: Self-verification test command run inside the worktree before declaring completion.
 - `required_skills`: Project skills required for the lane.
 
@@ -269,8 +275,8 @@ Repeat for every lane in the initiative. Record the mapping of `lane` -> `{lane_
 
 Execute lanes phase-by-phase according to the topological DAG. All lanes within a single phase run concurrently in parallel.
 
-### 3.1 Write Kickoff Handoff Artifact
-Before dispatching a lane, serialize its task brief to `/tmp/handoff-${SESSION_ID}-${LANE}.md` adhering to `LaneOrchestrator.build_lane_brief` in [`subagent/orchestrator.py`](subagent/orchestrator.py):
+### 3.1 Write Kickoff Brief
+Before dispatching a Lane, serialize its Kickoff Brief to `/tmp/handoff-${SESSION_ID}-${LANE}.md` adhering to `LaneOrchestrator.build_lane_brief` in [`subagent/orchestrator.py`](subagent/orchestrator.py):
 
 ```markdown
 # Lane Kickoff Brief: <LANE>
@@ -395,27 +401,27 @@ Inspect the JSON payload returned by the watcher on task completion:
 Halt automated progression on this lane until the user resolves the interaction and the agent returns to `working`, `idle`, or `done`.
 
 ### 3.4 Read Completion Receipt
-When the agent reaches `idle` or `done`, inspect the receipt file:
+When the agent reaches `idle` or `done`, inspect the Completion Receipt file:
 
 ```bash
 RECEIPT_FILE="/tmp/handoff-${SESSION_ID}-${LANE}-result.md"
 if [ ! -f "$RECEIPT_FILE" ]; then
-  echo "Error: Receipt file $RECEIPT_FILE not found for lane $LANE"
+  echo "Error: Completion Receipt file $RECEIPT_FILE not found for lane $LANE"
 fi
 ```
 
-Validate the receipt contents against the verification rules defined in `LaneOrchestrator.verify_lane_receipt` in [`subagent/orchestrator.py`](subagent/orchestrator.py):
+Validate the Completion Receipt contents against the verification rules defined in `LaneOrchestrator.verify_lane_receipt` in [`subagent/orchestrator.py`](subagent/orchestrator.py):
 - Extract `VERDICT` (must match `PASSED`).
 - **Enforce Implementation Workflow Gate**: For implementation lanes (`type: "implementation"` or `"implement"` in `required_skills`), inspect the `WORKFLOW` field:
   - Must be present and declare an implementation workflow containing `implement` (case-insensitive, e.g. `WORKFLOW: /implement` or `WORKFLOW: implement`).
-  - If missing or does not contain `implement`, reject Stage 1 verification:
+  - If missing or does not contain `implement`, reject Stage 1 Verification Gate:
     `"Stage 1 rejected: implementation lane did not execute /implement workflow"`.
   - Non-implementation lanes (`docs`, `research`, `chore` without `implement` skill) pass on `VERDICT: PASSED` without requiring `WORKFLOW: implement`.
 - Extract list of commits created (`git -C "$WORKTREE_DIR" log --oneline "$BASE_BRANCH..$LANE_BRANCH"`).
 - Extract modified files list.
 
 ### 3.5 Bounded Retries on Stage 1 Failure
-If `VERDICT` is `FAILED` or Stage 1 verification failed:
+If `VERDICT` is `FAILED` or Stage 1 Verification Gate failed:
 - **Maximum Retries**: Up to 2 fix attempts per lane.
 - Send remediation prompt:
   ```bash
@@ -550,8 +556,8 @@ Would you like to remove the child worktree workspaces and delete temporary lane
 
 ## Safety & Coordination Rules
 
-- **Strict Boundary Enforcement**: Always specify allowed file path boundaries in each lane's kickoff brief. Reject lane changes outside assigned paths.
+- **Strict Boundary Enforcement**: Always specify allowed file path boundaries in each Lane's Kickoff Brief. Reject lane changes outside assigned paths.
 - **Never Force Push**: Never run `git push --force` or modify remote branches without explicit user instructions.
 - **Preserve User Focus**: Pass `--no-focus` when creating worktree workspaces or panes so the user's active cursor is not hijacked.
-- **Clean Handshake**: Always verify `/tmp/handoff-...-result.md` existence and parse `VERDICT` before advancing to dependent DAG phases.
+- **Clean Handshake**: Always verify `/tmp/handoff-...-result.md` Completion Receipt existence and parse `VERDICT` before advancing to dependent DAG phases.
 - **Safe Workspace Preservation**: On teardown, remove each child worktree workspace using `herdr worktree remove --workspace "$LANE_WS_ID" --force`, which removes the child rows from the SPACES sidebar and cleans up the worktrees from disk. Never close the caller workspace or the parent repository space. Always prompt the user before removing worktrees.
