@@ -17,14 +17,22 @@ This command is _informed_ by the project's domain model and built on a shared d
 
 ### 1. Explore
 
-**Scope before you scan — YAGNI.** Deepening a module pays off by making future changes to it easier, so put extra weight on the parts of the codebase that have recently changed. Decide *where* to look before you look:
+**Deterministic discovery before organic browsing.** Rather than guessing where complexity hides, use deterministic Akashic Code Graph tools as the primary discovery step:
 
-- If the user named a direction — a module, a subsystem, a pain point — take it, and skip the inference below.
-- Otherwise, walk back a good stretch of the commit history (`git log --oneline`) to find the codebase's hot spots — the files and areas that keep coming up — and let those paths pull your attention first. If the changes are scattered with no clear hot spot, widen the net.
+1. **God Nodes Analysis**: Run `graph_god_nodes` (or `akashic graph god-nodes`) to identify god nodes, high in/out degree centrality hubs that concentrate complexity.
+2. **Community Partition Analysis**: Run `graph_get_community` (or `akashic graph communities`) to analyze graph community partitions and boundary leaks.
+3. **Coupling & Blast Radius Analysis**: Run `graph_blast_radius` (or `akashic graph blast-radius`) on candidate hubs to assess downstream impact, coupling, and ripple effect.
+4. **Surprising Edge & Inversion Detection**: Run `akashic graph surprising` to detect surprising dependency edges and layer inversion anomalies.
 
-Read the project's domain glossary (`CONTEXT.md`) and any ADRs in the area you're touching first.
+**Scope and commit hot spots.** Complement the deterministic graph findings with recent git activity and user direction:
 
-Then spawn a sub-agent to walk the codebase. Don't follow rigid heuristics — explore organically and note where you experience friction:
+- If the user named a direction — a module, a subsystem, a pain point — focus the graph queries and exploration there.
+- Otherwise, walk back commit history (`git log --oneline`) to intersect graph god nodes and anomalous edges with active churn areas.
+
+Read the project's domain glossary (`CONTEXT.md`) and any ADRs in `docs/adr/` in the area you're touching first.
+
+**Ground organic file exploration in the graph findings.**
+Spawn a sub-agent to inspect the identified god nodes, leaking communities, and anomalous edges. Ground organic file browsing in these graph findings, respecting `CONTEXT.md` vocabulary and ADRs in `docs/adr/`, noting where you experience friction:
 
 - Where does understanding one concept require bouncing between many small modules?
 - Where are modules **shallow** — interface nearly as complex as the implementation?

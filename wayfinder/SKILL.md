@@ -22,7 +22,7 @@ The map is a single issue on this repo's issue tracker, labelled `wayfinder:map`
 
 The map is an **index**, not a store. It lists the decisions made and points at the tickets that hold their detail; a decision lives in exactly one place — its ticket — so the map never restates it, only gists it and links.
 
-**Where the map, its child tickets, blocking, and frontier queries physically live is tracker-specific.** The issue tracker should have been provided to you — run `/setup-matt-pocock-skills` if not. Consult the tracker doc's "Wayfinding operations" section for how _this_ repo expresses them. If no tracker has been provided, default to the local-markdown tracker.
+**Where the map, its child tickets, blocking, and frontier queries physically live is tracker-specific.** The repository configuration is defined in `config/akashic.toml` — run `/setup-pedroca-skills` if not. By default, tickets live in `docs/tickets/` (Akashic Vault) as OKF v0.2 nodes governed by Akashic, or in the tracker configured in `config/akashic.toml`. Consult `config/akashic.toml` for how _this_ repo expresses them.
 
 ### The map body
 
