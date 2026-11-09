@@ -1,0 +1,41 @@
+# Unified Akashic & Pedroca Skills Configuration
+
+[vault]
+path = "docs"
+db_path = ".akashic/vault_index.db"
+okf_version = "0.2"
+
+[lint]
+enabled_rules = [
+    "L001",
+    "L002",
+    "L003",
+    "L004",
+    "L005",
+    "L006",
+    "L007",
+    "L008",
+    "L009",
+    "L010",
+    "L011",
+    "L012",
+]
+strict_forward_only = true
+
+[lint.custom_fields.artifact]
+required = false
+type = "string"
+allowed_values = ["adr", "spec", "ticket"]
+applies_to = ["decision", "architecture", "guide"]
+
+[workflow]
+default_spine = ["grill-with-docs", "to-spec", "to-tickets", "herdr-orchestration", "code-review"]
+
+[workflow.tracker]
+adapter = "vault"
+tickets_dir = "docs/tickets"
+
+[workflow.docs]
+adapter = "vault"
+specs_dir = "docs/specs"
+adr_dir = "docs/adr"
