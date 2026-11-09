@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presentation Stage (1920x1080)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-canvas: #090a0f;
+      --bg-surface: #12141c;
+      --bg-card: #181b26;
+      --text-primary: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-dim: rgba(56, 189, 248, 0.15);
+      --border: #242938;
+      --slide-scale: 1;
+      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--bg-canvas);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .viewport-shell {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .slide-stage {
+      width: 1920px;
+      height: 1080px;
+      transform: scale(var(--slide-scale));
+      transform-origin: center center;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-surface);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1920px;
+      height: 1080px;
+      padding: 80px 100px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease-in-out;
+      background: var(--bg-surface);
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 10;
+    }
+
+    /* Projection typography floors */
+    .kicker {
+      font-size: 20px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 16px;
+      font-family: var(--font-mono);
+    }
+
+    .slide-title {
+      font-size: 56px;
+      line-height: 1.15;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      max-width: 1600px;
+    }
+
+    .slide-subtitle {
+      font-size: 28px;
+      line-height: 1.4;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+      max-width: 1400px;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      font-size: 24px;
+      line-height: 1.5;
+    }
+
+    /* Layout archetype utilities */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-title {
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .card-text {
+      font-size: 24px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .metric-value {
+      font-size: 80px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      font-family: var(--font-mono);
+    }
+
+    .code-block {
+      background: #050608;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 20px;
+      line-height: 1.5;
+      color: #e2e8f0;
+      overflow: hidden;
+      white-space: pre;
+    }
+
+    /* Fragments */
+    [data-fragment] {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    [data-fragment].fragment-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Status Pill / Edit indicator */
+    #edit-indicator {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #ef4444;
+      color: white;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      display: none;
+      z-index: 1000;
+      letter-spacing: 0.05em;
+    }
+
+    /* Presenter Notes & Timer Drawer */
+    #notes-drawer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(18, 20, 28, 0.95);
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      padding: 24px 36px;
+      color: var(--text-primary);
+      display: none;
+      z-index: 500;
+      box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    #notes-drawer.open {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    .notes-meta {
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    .notes-timer {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .notes-content {
+      flex: 1;
+      font-size: 20px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    /* Overview Modal */
+    #overview-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(9, 10, 15, 0.95);
+      backdrop-filter: blur(12px);
+      display: none;
+      z-index: 600;
+      padding: 60px;
+      overflow-y: auto;
+    }
+
+    #overview-modal.open {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+      align-content: start;
+    }
+
+    .overview-card {
+      background: var(--bg-surface);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      aspect-ratio: 16 / 9;
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .overview-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .overview-card.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .overview-card-number {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--accent);
+    }
+
+    .overview-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Print & PDF unrolling */
+    @media print {
+      @page {
+        size: 1920px 1080px;
+        margin: 0;
+      }
+
+      html, body {
+        width: 1920px !important;
+        height: auto !important;
+        background: var(--bg-canvas) !important;
+        overflow: visible !important;
+      }
+
+      .viewport-shell {
+        display: block !important;
+        width: 1920px !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+
+      .slide-stage {
+        width: 1920px !important;
+        height: auto !important;
+        transform: none !important;
+        overflow: visible !important;
+        background: transparent !important;
+        box-shadow: none !important;
+      }
+
+      .slide {
+        position: relative !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        display: flex !important;
+        width: 1920px !important;
+        height: 1080px !important;
+        transform: none !important;
+        page-break-after: always;
+        break-after: page;
+        margin: 0 !important;
+        border: none !important;
+      }
+
+      [data-fragment] {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      #notes-drawer,
+      #overview-modal,
+      #edit-indicator {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="edit-indicator">EDIT MODE ENABLED</div>
+
+  <div class="viewport-shell">
+    <div class="slide-stage" id="stage">
+      <!-- Slide 0: Hero Title -->
+      <section class="slide active" data-slide-index="0">
+        <div class="kicker">Executive Briefing</div>
+        <h1 class="slide-title">Deterministic Agent Verification Pipelines</h1>
+        <p class="slide-subtitle">A high-velocity presentation stage locked to a 1920x1080 canvas with closed-loop browser QA</p>
+        <div class="slide-body">
+          <div class="grid-3">
+            <div class="card" data-fragment>
+              <div class="metric-value">100%</div>
+              <div class="card-title">Fixed Canvas Ratio</div>
+              <div class="card-text">Every slide projects cleanly at 1920x1080 without responsive layout shifts.</div>
+            </div>
+            <div class="card" data-fragment>
+              <div class="metric-value">0 px</div>
+              <div class="card-title">Zero Overflow</div>
+              <div class="card-text">Programmatic bounding-box audits ensure zero text clipping across the deck.</div>
+            </div>
+            <div class="card" data-fragment>
+              <div class="metric-value">&lt; 1s</div>
+              <div class="card-title">Instant Unroll</div>
+              <div class="card-text">Flawless multi-page PDF generation via standard print stylesheets.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 1: Three-Pillar Grid -->
+      <section class="slide" data-slide-index="1">
+        <div class="kicker">Core Architecture</div>
+        <h2 class="slide-title">Four Sequential Pipeline Stages Guarantee Deck Quality</h2>
+        <p class="slide-subtitle">From repository evidence to verified multi-format exports</p>
+        <div class="slide-body">
+          <div class="grid-3">
+            <div class="card" data-fragment>
+              <div class="card-title">1. SCQA Storyboard</div>
+              <div class="card-text">Draft assertive Action Titles where reading headers alone conveys the entire strategic message.</div>
+            </div>
+            <div class="card" data-fragment>
+              <div class="card-title">2. Fixed Coordinate Stage</div>
+              <div class="card-text">Scale the 1920x1080 stage uniformly while locking typography floors for 15-foot legibility.</div>
+            </div>
+            <div class="card" data-fragment>
+              <div class="card-title">3. Vector QA Gate</div>
+              <div class="card-text">Validate DOM bounds and export print-ready PDFs through headless browser verification.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Speaker Notes & Timer Drawer -->
+  <aside id="notes-drawer">
+    <div class="notes-meta">
+      <div>Slide <span id="notes-slide-index">1</span> of <span id="notes-slide-total">2</span></div>
+      <div class="notes-timer" id="notes-timer">00:00</div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Press N to close</div>
+    </div>
+    <div class="notes-content" id="notes-body">
+      Welcome the audience and introduce the fixed 1920x1080 projection system.
+    </div>
+  </aside>
+
+  <!-- Slide Overview Modal -->
+  <div id="overview-modal"></div>
+
+  <script>
+    // Slide data with speaker notes
+    const SLIDE_NOTES = [
+      "Welcome the audience and introduce the fixed 1920x1080 projection system.",
+      "Explain the four stages of the pipeline: Storyboard, Stage Construction, Vector Diagrams, and QA Gate."
+    ];
+
+    let currentSlideIndex = 0;
+    let currentFragmentIndex = -1;
+    let isEditMode = false;
+    let timerSeconds = 0;
+    let timerInterval = null;
+
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const stage = document.getElementById('stage');
+    const notesDrawer = document.getElementById('notes-drawer');
+    const notesSlideIndex = document.getElementById('notes-slide-index');
+    const notesSlideTotal = document.getElementById('notes-slide-total');
+    const notesBody = document.getElementById('notes-body');
+    const notesTimer = document.getElementById('notes-timer');
+    const overviewModal = document.getElementById('overview-modal');
+    const editIndicator = document.getElementById('edit-indicator');
+
+    // Virtual canvas scale calculation
+    function updateScale() {
+      const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      document.documentElement.style.setProperty('--slide-scale', scale);
+    }
+    window.addEventListener('resize', updateScale);
+    updateScale();
+
+    // Timer logic
+    function startTimer() {
+      if (timerInterval) return;
+      timerInterval = setInterval(() => {
+        timerSeconds++;
+        const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+        const secs = String(timerSeconds % 60).padStart(2, '0');
+        notesTimer.textContent = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    // Active slide management
+    function showSlide(index, showAllFragments = false) {
+      if (index < 0 || index >= slides.length) return;
+      currentSlideIndex = index;
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx === currentSlideIndex);
+      });
+
+      const activeSlide = slides[currentSlideIndex];
+      const fragments = Array.from(activeSlide.querySelectorAll('[data-fragment]'));
+      if (showAllFragments) {
+        currentFragmentIndex = fragments.length - 1;
+        fragments.forEach(f => f.classList.add('fragment-visible'));
+      } else {
+        currentFragmentIndex = -1;
+        fragments.forEach(f => f.classList.remove('fragment-visible'));
+      }
+
+      updateNotes();
+      updateOverviewSelection();
+    }
+
+    function advance() {
+      const activeSlide = slides[currentSlideIndex];
+      const fragments = Array.from(activeSlide.querySelectorAll('[data-fragment]'));
+      if (currentFragmentIndex < fragments.length - 1) {
+        currentFragmentIndex++;
+        fragments[currentFragmentIndex].classList.add('fragment-visible');
+      } else if (currentSlideIndex < slides.length - 1) {
+        showSlide(currentSlideIndex + 1);
+      }
+    }
+
+    function retreat() {
+      const activeSlide = slides[currentSlideIndex];
+      const fragments = Array.from(activeSlide.querySelectorAll('[data-fragment]'));
+      if (currentFragmentIndex >= 0) {
+        fragments[currentFragmentIndex].classList.remove('fragment-visible');
+        currentFragmentIndex--;
+      } else if (currentSlideIndex > 0) {
+        showSlide(currentSlideIndex - 1, true);
+      }
+    }
+
+    function updateNotes() {
+      notesSlideIndex.textContent = currentSlideIndex + 1;
+      notesSlideTotal.textContent = slides.length;
+      notesBody.textContent = SLIDE_NOTES[currentSlideIndex] || 'No speaker notes for this slide.';
+    }
+
+    // Toggle drawers & modes
+    function toggleNotes() {
+      notesDrawer.classList.toggle('open');
+      if (notesDrawer.classList.contains('open')) {
+        startTimer();
+      }
+    }
+
+    function toggleOverview() {
+      overviewModal.classList.toggle('open');
+      if (overviewModal.classList.contains('open')) {
+        renderOverview();
+      }
+    }
+
+    function renderOverview() {
+      overviewModal.innerHTML = '';
+      slides.forEach((s, idx) => {
+        const card = document.createElement('div');
+        card.className = `overview-card ${idx === currentSlideIndex ? 'active' : ''}`;
+        const titleText = s.querySelector('.slide-title')?.textContent || `Slide ${idx + 1}`;
+        card.innerHTML = `
+          <div class="overview-card-number">Slide ${idx + 1}</div>
+          <div class="overview-card-title">${titleText}</div>
+        `;
+        card.addEventListener('click', () => {
+          showSlide(idx);
+          toggleOverview();
+        });
+        overviewModal.appendChild(card);
+      });
+    }
+
+    function updateOverviewSelection() {
+      const cards = overviewModal.querySelectorAll('.overview-card');
+      cards.forEach((c, idx) => {
+        c.classList.toggle('active', idx === currentSlideIndex);
+      });
+    }
+
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      editIndicator.style.display = isEditMode ? 'block' : 'none';
+      const editableElements = document.querySelectorAll('.slide-title, .slide-subtitle, .kicker, .card-title, .card-text, .metric-value, .code-block');
+      editableElements.forEach(el => {
+        el.contentEditable = isEditMode ? 'true' : 'false';
+      });
+    }
+
+    // Keyboard controls
+    window.addEventListener('keydown', (e) => {
+      if (isEditMode && e.target.isContentEditable) {
+        if (e.key === 'Escape') toggleEditMode();
+        return;
+      }
+
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+        e.preventDefault();
+        advance();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        retreat();
+      } else if (e.key === 'n' || e.key === 'N') {
+        e.preventDefault();
+        toggleNotes();
+      } else if (e.key === 'o' || e.key === 'O') {
+        e.preventDefault();
+        toggleOverview();
+      } else if (e.key === 'e' || e.key === 'E') {
+        e.preventDefault();
+        toggleEditMode();
+      } else if (e.key === 'Escape') {
+        if (overviewModal.classList.contains('open')) toggleOverview();
+        if (notesDrawer.classList.contains('open')) toggleNotes();
+      }
+    });
+
+    // Programmatic audit helper for Playwright QA
+    window.auditSlides = function() {
+      const report = {
+        passed: true,
+        totalSlides: slides.length,
+        overflows: []
+      };
+
+      const savedSlide = currentSlideIndex;
+
+      slides.forEach((slide, idx) => {
+        slide.classList.add('active');
+        const elementsToCheck = [slide, ...Array.from(slide.querySelectorAll('*'))];
+        
+        elementsToCheck.forEach((el) => {
+          const vOverflow = el.scrollHeight > el.clientHeight + 2;
+          const hOverflow = el.scrollWidth > el.clientWidth + 2;
+          if (vOverflow || hOverflow) {
+            report.passed = false;
+            report.overflows.push({
+              slideIndex: idx,
+              tag: el.tagName.toLowerCase(),
+              className: el.className,
+              scrollHeight: el.scrollHeight,
+              clientHeight: el.clientHeight,
+              scrollWidth: el.scrollWidth,
+              clientWidth: el.clientWidth
+            });
+          }
+        });
+        slide.classList.remove('active');
+      });
+
+      showSlide(savedSlide);
+      return report;
+    };
+
+    // Initial setup
+    showSlide(0);
+  </script>
+</body>
+</html>

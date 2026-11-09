@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="warm_dark" data-state="populated" data-candidate="awesome">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Prototype · Living Visual Contract & Design System</title>
+  <style>
+/* === SECTION: TOKENS: PRIMITIVES === */
+:root {
+  /* Primitives: Corner Radius Scale */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Primitives: Spacing Scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-2xl: 24px;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Primitives: Typography */
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace;
+  --font-family-sans: var(--font-ui);
+  --font-family-mono: var(--font-mono);
+
+  /* Primitives: Palette Scale */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-emerald-500: #10b981;
+  --color-rose-500: #f43f5e;
+  --color-indigo-500: #6366f1;
+  --color-indigo-600: #4f46e5;
+}
+
+/* === SECTION: TOKENS: SEMANTIC === */
+:root,
+[data-theme="warm_dark"] {
+  --theme-name: "warm_dark";
+  --bg: #181614;
+  --surface: #211E1B;
+  --surface-container: #2A2521;
+  --surface-container-high: #352F2A;
+  --surface-raised: #2A2521;
+  --on-bg: #E6DFD5;
+  --on-surface: #E6DFD5;
+  --on-surface-muted: #A89F93;
+  --on-surface-var: #A89F93;
+  --outline: #524B43;
+  --outline-variant: #3D3731;
+  --border: #3D3731;
+  --border-focus: #D98A4E;
+  --primary: #D98A4E;
+  --primary-hover: #C5783D;
+  --on-primary: #2B1708;
+  --primary-container: #4A2E16;
+  --on-primary-container: #FFDCC4;
+  --secondary: #7A9A8B;
+  --on-secondary: #12261D;
+  --secondary-container: #263D33;
+  --on-secondary-container: #BCE0CF;
+  --danger: #FFB4AB;
+  --error: #FFB4AB;
+  --success: #7A9A8B;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] {
+  --theme-name: "light";
+  --bg: #FAF8F5;
+  --surface: #FFFFFF;
+  --surface-container: #F0ECE1;
+  --surface-container-high: #E6E1D5;
+  --surface-raised: #F0ECE1;
+  --on-bg: #1C1B1A;
+  --on-surface: #1C1B1A;
+  --on-surface-muted: #605C56;
+  --on-surface-var: #605C56;
+  --outline: #858079;
+  --outline-variant: #CAC4B9;
+  --border: #CAC4B9;
+  --border-focus: #B86528;
+  --primary: #B86528;
+  --primary-hover: #9E531D;
+  --on-primary: #FFFFFF;
+  --primary-container: #FDE8D7;
+  --on-primary-container: #3D1C05;
+  --secondary: #536358;
+  --on-secondary: #FFFFFF;
+  --secondary-container: #D6E0D9;
+  --on-secondary-container: #101E15;
+  --danger: #BA1A1A;
+  --error: #BA1A1A;
+  --success: #2E6A4F;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+  --theme-name: "dark";
+  --bg: #111318;
+  --surface: #191C22;
+  --surface-container: #22262F;
+  --surface-container-high: #2B303C;
+  --surface-raised: #22262F;
+  --on-bg: #E2E2E9;
+  --on-surface: #E2E2E9;
+  --on-surface-muted: #939AA6;
+  --on-surface-var: #939AA6;
+  --outline: #434752;
+  --outline-variant: #2B303C;
+  --border: #2B303C;
+  --border-focus: #A2C8FF;
+  --primary: #A2C8FF;
+  --primary-hover: #8AB8F8;
+  --on-primary: #00325B;
+  --primary-container: #004880;
+  --on-primary-container: #D3E4FF;
+  --secondary: #BBC7DB;
+  --on-secondary: #253140;
+  --secondary-container: #3B4858;
+  --on-secondary-container: #D7E3F7;
+  --danger: #FFB4AB;
+  --error: #FFB4AB;
+  --success: #7A9A8B;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="sepia"] {
+  --theme-name: "sepia";
+  --bg: #F4ECD8;
+  --surface: #EFE4C8;
+  --surface-container: #E4D5B7;
+  --surface-container-high: #D9C8A6;
+  --surface-raised: #E4D5B7;
+  --on-bg: #2C221E;
+  --on-surface: #2C221E;
+  --on-surface-muted: #5C4B3B;
+  --on-surface-var: #5C4B3B;
+  --outline: #9D8A78;
+  --outline-variant: #BFB09F;
+  --border: #BFB09F;
+  --border-focus: #8C5327;
+  --primary: #8C5327;
+  --primary-hover: #75441E;
+  --on-primary: #FFFFFF;
+  --primary-container: #F5D9C1;
+  --on-primary-container: #361B06;
+  --secondary: #4F6D5A;
+  --on-secondary: #FFFFFF;
+  --secondary-container: #CFE4D6;
+  --on-secondary-container: #14291C;
+  --danger: #BA1A1A;
+  --error: #BA1A1A;
+  --success: #2E6A4F;
+  --shadow-sm: 0 1px 2px 0 rgba(67, 52, 34, 0.08);
+  --shadow-md: 0 4px 6px -1px rgba(67, 52, 34, 0.12);
+}
+
+/* --- Multi-Skill Prototype Candidates Token Variations --- */
+/* Candidate A: awesome-design-md (Industry Benchmark - Linear / Apple tech aesthetic) */
+[data-candidate="awesome"] {
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Candidate B: frontend-design (Bespoke Studio - Refined Editorial Identity & Warm Terracotta/Sage) */
+[data-candidate="frontend"] {
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --font-ui: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --primary: #E07A5F;
+  --primary-hover: #D0694E;
+  --border-focus: #E07A5F;
+  --secondary: #81B29A;
+}
+[data-candidate="frontend"][data-theme="light"],
+[data-candidate="frontend"] [data-theme="light"] {
+  --primary: #C85A32;
+  --primary-hover: #B04923;
+  --border-focus: #C85A32;
+  --secondary: #3D6B58;
+}
+[data-candidate="frontend"][data-theme="dark"],
+[data-candidate="frontend"] [data-theme="dark"] {
+  --primary: #F28482;
+  --primary-hover: #DF7371;
+  --border-focus: #F28482;
+  --secondary: #84A59D;
+}
+[data-candidate="frontend"][data-theme="sepia"],
+[data-candidate="frontend"] [data-theme="sepia"] {
+  --primary: #A24936;
+  --primary-hover: #8C3E2D;
+  --border-focus: #A24936;
+  --secondary: #3E5C50;
+}
+
+/* Candidate C: design-taste-frontend (Anti-Slop Modern - High Density & Electric Indigo/Cyan Elevation) */
+[data-candidate="taste"] {
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --font-ui: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace, sans-serif;
+  --primary: #6366F1;
+  --primary-hover: #4F46E5;
+  --border-focus: #6366F1;
+  --secondary: #06B6D4;
+}
+[data-candidate="taste"][data-theme="light"],
+[data-candidate="taste"] [data-theme="light"] {
+  --primary: #4F46E5;
+  --primary-hover: #4338CA;
+  --border-focus: #4F46E5;
+  --secondary: #0891B2;
+}
+[data-candidate="taste"][data-theme="dark"],
+[data-candidate="taste"] [data-theme="dark"] {
+  --primary: #818CF8;
+  --primary-hover: #6366F1;
+  --border-focus: #818CF8;
+  --secondary: #22D3EE;
+}
+[data-candidate="taste"][data-theme="sepia"],
+[data-candidate="taste"] [data-theme="sepia"] {
+  --primary: #5548C8;
+  --primary-hover: #4437B0;
+  --border-focus: #5548C8;
+  --secondary: #0E7490;
+}
+
+/* === SECTION: BASE & RESET === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  background-color: var(--bg);
+  color: var(--on-surface);
+  line-height: 1.5;
+  min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+}
+
+button {
+  font-family: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+/* TOP GLOBAL HEADER */
+.app-header {
+  border-bottom: 1px solid var(--outline-variant);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.app-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  background: var(--primary);
+  color: var(--on-primary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.brand-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--on-surface);
+  line-height: 1.2;
+}
+
+.brand-subtitle {
+  font-size: 0.72rem;
+  color: var(--on-surface-muted);
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-selector-group {
+  display: flex;
+  background: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 2px;
+}
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--on-surface-muted);
+  transition: all 0.15s ease;
+}
+
+.theme-btn:hover {
+  color: var(--on-surface);
+}
+
+.theme-btn.active {
+  background: var(--surface);
+  color: var(--on-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.theme-dot.warm_dark { background: #D98A4E; }
+.theme-dot.sepia { background: #8C5327; }
+.theme-dot.light { background: #B86528; }
+.theme-dot.dark { background: #A2C8FF; }
+
+/* CANDIDATE SELECTOR & MVP PROMOTION */
+.candidate-selector-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-full);
+  padding: 4px 8px;
+  flex-wrap: wrap;
+}
+
+.candidate-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--on-surface-muted);
+  padding: 0 4px;
+}
+
+.candidate-pill {
+  border-radius: var(--radius-full);
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--on-surface-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.candidate-pill:hover {
+  color: var(--on-surface);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.candidate-pill.active {
+  background: var(--surface);
+  color: var(--primary);
+  border-color: var(--primary);
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.candidate-sub {
+  font-size: 0.68rem;
+  opacity: 0.75;
+  font-weight: 500;
+}
+
+.mvp-btn {
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  border: none;
+  transition: filter 0.15s ease, transform 0.1s ease;
+  margin-left: 4px;
+}
+
+.mvp-btn:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+
+.mvp-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  border: 1px solid var(--primary);
+  letter-spacing: 0.02em;
+}
+
+/* === SECTION: HARNESS: STATE SIMULATOR === */
+.workspace {
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  gap: 28px;
+  padding: 24px;
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* LEFT COLUMN: INTERACTIVE DEVICE SIMULATOR */
+.device-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.device-screen-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.screen-jump-btn {
+  background: var(--surface-container);
+  color: var(--on-surface-muted);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-full);
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.screen-jump-btn:hover {
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+}
+
+.screen-jump-btn.active {
+  background: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
+}
+
+.device-state-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-full);
+  padding: 4px 8px;
+  margin-bottom: 12px;
+}
+
+.state-bar-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--on-surface-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0 4px;
+}
+
+.state-pill {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--on-surface-muted);
+  border-radius: var(--radius-full);
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.state-pill:hover {
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+}
+
+.state-pill.active {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+/* Phone hardware frame */
+.phone-frame {
+  width: 390px;
+  height: 780px;
+  background: var(--bg);
+  border-radius: 44px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45), 0 0 0 10px #1E1D1B, 0 0 0 12px #2E2C28;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--outline-variant);
+}
+
+.phone-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 24px;
+  background: #000;
+  border-radius: 14px;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 12px;
+}
+
+.phone-camera-lens {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #111a24;
+  border: 1px solid #1a2c3a;
+}
+
+.status-bar {
+  height: 42px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 24px 6px 24px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  z-index: 70;
+  background: var(--surface);
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-icon-svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.phone-top-app-bar {
+  height: 52px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--outline-variant);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 60;
+}
+
+.phone-top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phone-top-bar-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--on-surface);
+}
+
+.phone-icon-btn {
+  background: none;
+  border: none;
+  color: var(--on-surface);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.phone-icon-btn:hover {
+  background: var(--surface-container);
+}
+
+.phone-icon-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.phone-viewport {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  background: var(--bg);
+  padding: 16px;
+}
+
+/* Phone Bottom Navigation */
+.phone-bottom-nav {
+  height: 56px;
+  display: flex;
+  background: var(--surface);
+  border-top: 1px solid var(--outline-variant);
+  z-index: 60;
+}
+
+.nav-destination-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--on-surface-muted);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.nav-destination-btn.active {
+  color: var(--primary);
+}
+
+.nav-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.home-indicator-bar {
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+}
+
+.home-indicator-pill {
+  width: 120px;
+  height: 4px;
+  background: var(--on-surface-muted);
+  opacity: 0.4;
+  border-radius: 2px;
+}
+
+/* Declarative State Switching Logic */
+.state-view {
+  display: none;
+}
+
+[data-state="populated"] .state-view-populated {
+  display: block;
+}
+
+[data-state="loading"] .state-view-loading {
+  display: block;
+}
+
+[data-state="empty"] .state-view-empty {
+  display: block;
+}
+
+[data-state="error"] .state-view-error {
+  display: block;
+}
+
+/* === SECTION: COMPONENTS: FOUNDATIONAL === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+  line-height: 1.25;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--on-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-outline {
+  border: 1px solid var(--outline-variant);
+  color: var(--on-surface);
+  background-color: transparent;
+}
+
+.btn-outline:hover {
+  background-color: var(--surface-container);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  border-radius: var(--radius-xs);
+  background: var(--surface-container);
+  color: var(--on-surface-muted);
+}
+
+.badge-success {
+  background: rgba(122, 154, 139, 0.2);
+  color: var(--success);
+}
+
+.badge-danger {
+  background: rgba(244, 63, 94, 0.2);
+  color: var(--danger);
+}
+
+/* Skeleton Loading Shimmer */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-container) 25%,
+    var(--outline-variant) 50%,
+    var(--surface-container) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-xs);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+  height: 12px;
+  margin-bottom: 8px;
+}
+
+.skeleton-title {
+  height: 18px;
+  width: 50%;
+  margin-bottom: 12px;
+}
+
+.skeleton-card {
+  height: 88px;
+  border-radius: var(--radius-sm);
+}
+
+/* RIGHT COLUMN: 4-CARD DESIGN SYSTEM INSPECTOR */
+.inspector-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inspector-card {
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-title {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--on-surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-subtitle {
+  font-size: 0.74rem;
+  color: var(--on-surface-muted);
+}
+
+.swatches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+}
+
+.swatch-item {
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-container);
+}
+
+.swatch-color-box {
+  height: 38px;
+  width: 100%;
+}
+
+.swatch-info {
+  padding: 4px 6px;
+  font-size: 0.68rem;
+}
+
+.swatch-name {
+  font-weight: 700;
+  color: var(--on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.swatch-hex {
+  color: var(--on-surface-muted);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+}
+
+.contrast-table-wrapper {
+  overflow-x: auto;
+}
+
+.contrast-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.74rem;
+}
+
+.contrast-table th, .contrast-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--outline-variant);
+  text-align: left;
+}
+
+.contrast-table th {
+  color: var(--on-surface-muted);
+  font-weight: 700;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.contrast-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  font-weight: 800;
+  font-size: 0.68rem;
+}
+
+.contrast-badge.pass {
+  background: rgba(122, 154, 139, 0.2);
+  color: var(--success);
+}
+
+.contrast-badge.fail {
+  background: rgba(220, 53, 69, 0.2);
+  color: var(--danger);
+}
+
+/* Token tables */
+.token-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.74rem;
+}
+
+.token-table th, .token-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--outline-variant);
+  text-align: left;
+}
+
+.token-table th {
+  color: var(--on-surface-muted);
+  font-weight: 700;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+}
+
+.inventory-section-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-top: 8px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.preview-pill-btn {
+  background: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.preview-pill-btn:hover {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+/* Toast Notification Container */
+.toast-msg {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+  border: 1px solid var(--outline);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 600;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.toast-msg.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === SECTION: COMPONENTS: DOMAIN === */
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.metric-card {
+  background: var(--surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+}
+
+.metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--on-surface-muted);
+  font-size: 0.72rem;
+}
+
+.metric-value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-top: 4px;
+  color: var(--on-surface);
+}
+
+/* Transaction Data Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.72rem;
+}
+
+.data-table th, .data-table td {
+  padding: 8px 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.data-table th {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: var(--on-surface-muted);
+}
+
+/* State Screens Components */
+.empty-state, .error-state {
+  text-align: center;
+  padding: 32px 16px;
+  border: 1px dashed var(--outline-variant);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.state-icon {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 12px;
+  stroke: var(--on-surface-muted);
+}
+
+.error-state .state-icon {
+  stroke: var(--danger);
+}
+
+.state-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.state-description {
+  color: var(--on-surface-muted);
+  font-size: 0.75rem;
+  margin: 0 auto 16px;
+  line-height: 1.4;
+}
+
+/* === SECTION: SCREENS === */
+.screen {
+  display: none;
+}
+
+.screen.active-screen {
+  display: block;
+}
+
+.screen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.screen-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+  </style>
+</head>
+<body>
+
+  <!-- TOP GLOBAL HEADER & CANDIDATE / THEME SWITCHER -->
+  <header class="app-header">
+    <div class="app-header-brand">
+      <div class="brand-logo">P</div>
+      <div>
+        <div class="brand-title">Living Visual Contract & Design System</div>
+        <div class="brand-subtitle">Multi-Skill Exploration · Dual-Pane Simulator · 4-Card Token Inspector</div>
+      </div>
+    </div>
+
+    <!-- CANDIDATE SELECTOR PILL GROUP & MVP PROMOTION -->
+    <div class="candidate-selector-group">
+      <span class="candidate-label">Candidate:</span>
+      <button class="candidate-pill active" data-candidate-btn="awesome" onclick="setCandidate('awesome')" title="Candidate A: Curated industry benchmark aesthetic mapped to product domain">
+        ★ Candidate A: awesome-design-md <span class="candidate-sub">(Industry Benchmark)</span>
+      </button>
+      <button class="candidate-pill" data-candidate-btn="frontend" onclick="setCandidate('frontend')" title="Candidate B: Distinctive studio visual identity (bespoke typography & intentional signature)">
+        Candidate B: frontend-design <span class="candidate-sub">(Bespoke Studio)</span>
+      </button>
+      <button class="candidate-pill" data-candidate-btn="taste" onclick="setCandidate('taste')" title="Candidate C: Anti-slop modern utility design system (audit-verified density & elevation)">
+        Candidate C: design-taste-frontend <span class="candidate-sub">(Anti-Slop Modern)</span>
+      </button>
+      <button class="mvp-btn" id="setMvpBtn" onclick="setAsMvp()" title="Lock active candidate as canonical MVP Contract">
+        ★ Set as MVP
+      </button>
+      <span class="mvp-badge" id="mvpStatusBadge">MVP: awesome-design-md</span>
+    </div>
+
+    <div class="header-controls">
+      <div class="theme-selector-group">
+        <button class="theme-btn active" data-theme-target="warm_dark" onclick="setAppTheme('warm_dark')">
+          <span class="theme-dot warm_dark"></span> Warm Dark
+        </button>
+        <button class="theme-btn" data-theme-target="light" onclick="setAppTheme('light')">
+          <span class="theme-dot light"></span> Light
+        </button>
+        <button class="theme-btn" data-theme-target="dark" onclick="setAppTheme('dark')">
+          <span class="theme-dot dark"></span> Dark
+        </button>
+        <button class="theme-btn" data-theme-target="sepia" onclick="setAppTheme('sepia')">
+          <span class="theme-dot sepia"></span> Sepia
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN DUAL-PANE WORKSPACE -->
+  <main class="workspace">
+
+    <!-- LEFT COLUMN: INTERACTIVE DEVICE SIMULATOR -->
+    <div class="device-container">
+
+      <!-- View Selector (Screens) -->
+      <div class="device-screen-nav">
+        <button class="screen-jump-btn active" data-screen-btn="overview" onclick="navigateToScreen('overview')">Overview</button>
+        <button class="screen-jump-btn" data-screen-btn="detail" onclick="navigateToScreen('detail')">Detail</button>
+        <button class="screen-jump-btn" data-screen-btn="settings" onclick="navigateToScreen('settings')">Settings</button>
+      </div>
+
+      <!-- State Simulator Bar -->
+      <div class="device-state-bar">
+        <span class="state-bar-label">State:</span>
+        <button class="state-pill active" data-set-state="populated" onclick="setPrototypeState('populated')">Populated</button>
+        <button class="state-pill" data-set-state="loading" onclick="setPrototypeState('loading')">Loading</button>
+        <button class="state-pill" data-set-state="empty" onclick="setPrototypeState('empty')">Empty</button>
+        <button class="state-pill" data-set-state="error" onclick="setPrototypeState('error')">Error</button>
+      </div>
+
+      <!-- PHONE HARDWARE FRAME -->
+      <div class="phone-frame" id="phoneSimulator">
+
+        <!-- Top Camera Island -->
+        <div class="phone-island">
+          <div class="phone-camera-lens"></div>
+        </div>
+
+        <!-- Android Status Bar -->
+        <div class="status-bar">
+          <span>09:41</span>
+          <div class="status-icons">
+            <svg class="status-icon-svg" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"/></svg>
+            <svg class="status-icon-svg" viewBox="0 0 24 24"><path d="M2 22h20V2L2 22z"/></svg>
+            <svg class="status-icon-svg" viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+          </div>
+        </div>
+
+        <!-- Phone Top App Bar -->
+        <div class="phone-top-app-bar">
+          <div class="phone-top-bar-left">
+            <button class="phone-icon-btn" id="phoneBackBtn" style="display:none;" onclick="navigateToScreen('overview')">
+              <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            </button>
+            <h1 class="phone-top-bar-title" id="phoneTopBarTitle">Overview</h1>
+          </div>
+          <div class="phone-top-bar-right">
+            <button class="phone-icon-btn" title="Refresh" onclick="showToast('Refreshed screen data')">
+              <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Phone Screen Viewport -->
+        <div class="phone-viewport" id="phoneViewport">
+
+          <!-- SCREEN 1: OVERVIEW -->
+          <section id="screen-overview" class="screen active-screen">
+            <div class="screen-header">
+              <span style="font-size:0.8rem;color:var(--on-surface-muted);">Operational Metrics</span>
+              <button class="btn btn-primary" style="padding:4px 10px;font-size:0.72rem;" onclick="showToast('New record modal opened')">+ New</button>
+            </div>
+
+            <!-- State View: Populated -->
+            <div class="state-view state-view-populated">
+              <div class="metrics-grid">
+                <div class="metric-card">
+                  <div class="metric-header">
+                    <span>Contracts</span>
+                    <span class="badge badge-success">+14%</span>
+                  </div>
+                  <div class="metric-value">1,280</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-header">
+                    <span>States</span>
+                    <span class="badge badge-success">4 / 4</span>
+                  </div>
+                  <div class="metric-value">100%</div>
+                </div>
+              </div>
+
+              <div class="card" style="margin-top:10px;">
+                <div style="font-size:0.8rem;font-weight:700;margin-bottom:8px;">Recent Activity</div>
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Identifier</th>
+                      <th>Token Target</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>#TK-101</code></td>
+                      <td>Theme Palettes</td>
+                      <td><span class="badge badge-success">Synced</span></td>
+                    </tr>
+                    <tr>
+                      <td><code>#TK-102</code></td>
+                      <td>Contrast Grid</td>
+                      <td><span class="badge badge-success">Pass</span></td>
+                    </tr>
+                    <tr>
+                      <td><code>#TK-103</code></td>
+                      <td>Component Seam</td>
+                      <td><span class="badge badge-success">Active</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- State View: Loading -->
+            <div class="state-view state-view-loading">
+              <div class="metrics-grid">
+                <div class="metric-card skeleton skeleton-card"></div>
+                <div class="metric-card skeleton skeleton-card"></div>
+              </div>
+              <div class="card" style="margin-top:10px;">
+                <div class="skeleton skeleton-title"></div>
+                <div class="skeleton skeleton-text" style="width: 100%;"></div>
+                <div class="skeleton skeleton-text" style="width: 90%;"></div>
+                <div class="skeleton skeleton-text" style="width: 75%;"></div>
+              </div>
+            </div>
+
+            <!-- State View: Empty -->
+            <div class="state-view state-view-empty">
+              <div class="empty-state">
+                <svg class="state-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                  <path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                </svg>
+                <h2 class="state-title">No Records Found</h2>
+                <p class="state-description">There are no operational data points in this prototype view yet.</p>
+                <button class="btn btn-primary" onclick="setPrototypeState('populated')">Initialize Sample Data</button>
+              </div>
+            </div>
+
+            <!-- State View: Error -->
+            <div class="state-view state-view-error">
+              <div class="error-state">
+                <svg class="state-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <h2 class="state-title">Failed to Synchronize</h2>
+                <p class="state-description">An unexpected network failure occurred while loading records.</p>
+                <button class="btn btn-outline" onclick="setPrototypeState('loading'); setTimeout(() => setPrototypeState('populated'), 700);">
+                  Retry Connection
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- SCREEN 2: DETAIL -->
+          <section id="screen-detail" class="screen">
+            <div class="screen-header">
+              <span style="font-size:0.8rem;color:var(--on-surface-muted);">Detail View</span>
+            </div>
+
+            <!-- State View: Populated -->
+            <div class="state-view state-view-populated">
+              <div class="card">
+                <div style="font-size:0.9rem;font-weight:700;margin-bottom:6px;">2-Tier Architecture</div>
+                <p style="font-size:0.75rem;color:var(--on-surface-muted);margin-bottom:12px;">
+                  Strict separation between primitive tokens and semantic intents allows instant theme parity across Warm Dark, Light, Dark, and Sepia.
+                </p>
+                <div style="display:flex;gap:6px;">
+                  <span class="badge">Primitives</span>
+                  <span class="badge">Semantic</span>
+                  <span class="badge badge-success">4 Themes</span>
+                </div>
+              </div>
+
+              <div class="card" style="margin-top:12px;">
+                <div style="font-size:0.9rem;font-weight:700;margin-bottom:6px;">Screen Boundaries</div>
+                <p style="font-size:0.75rem;color:var(--on-surface-muted);">
+                  Each screen inside the phone viewport is mapped to its dedicated container and toggled declaratively.
+                </p>
+              </div>
+            </div>
+
+            <!-- State View: Loading -->
+            <div class="state-view state-view-loading">
+              <div class="card">
+                <div class="skeleton skeleton-title"></div>
+                <div class="skeleton skeleton-text" style="width: 100%;"></div>
+                <div class="skeleton skeleton-text" style="width: 80%;"></div>
+              </div>
+            </div>
+
+            <!-- State View: Empty -->
+            <div class="state-view state-view-empty">
+              <div class="empty-state">
+                <h2 class="state-title">No Detail Available</h2>
+                <p class="state-description">Select an item from Overview to view specifications.</p>
+                <button class="btn btn-primary" onclick="navigateToScreen('overview')">Back to Overview</button>
+              </div>
+            </div>
+
+            <!-- State View: Error -->
+            <div class="state-view state-view-error">
+              <div class="error-state">
+                <h2 class="state-title">Detail Fetch Failed</h2>
+                <p class="state-description">Could not retrieve entity specification.</p>
+                <button class="btn btn-outline" onclick="setPrototypeState('populated')">Retry</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- SCREEN 3: SETTINGS -->
+          <section id="screen-settings" class="screen">
+            <div class="screen-header">
+              <span style="font-size:0.8rem;color:var(--on-surface-muted);">Preferences</span>
+            </div>
+
+            <!-- State View: Populated -->
+            <div class="state-view state-view-populated">
+              <div class="card">
+                <div style="font-size:0.85rem;font-weight:700;margin-bottom:8px;">Design System Topology</div>
+                <p style="font-size:0.75rem;color:var(--on-surface-muted);margin-bottom:12px;">
+                  Configure project ownership: Self-Contained styling or Consolidated design library.
+                </p>
+                <button class="btn btn-outline" style="width:100%;font-size:0.75rem;" onclick="showToast('Topology: Consolidated')">
+                  Mode: Consolidated
+                </button>
+              </div>
+
+              <div class="card" style="margin-top:12px;">
+                <div style="font-size:0.85rem;font-weight:700;margin-bottom:8px;">Theme Palette Selection</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+                  <button class="btn btn-outline" style="font-size:0.7rem;" onclick="setAppTheme('warm_dark')">Warm Dark</button>
+                  <button class="btn btn-outline" style="font-size:0.7rem;" onclick="setAppTheme('light')">Light</button>
+                  <button class="btn btn-outline" style="font-size:0.7rem;" onclick="setAppTheme('dark')">Dark</button>
+                  <button class="btn btn-outline" style="font-size:0.7rem;" onclick="setAppTheme('sepia')">Sepia</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- State View: Loading -->
+            <div class="state-view state-view-loading">
+              <div class="card">
+                <div class="skeleton skeleton-title"></div>
+                <div class="skeleton skeleton-text" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <!-- State View: Empty -->
+            <div class="state-view state-view-empty">
+              <div class="empty-state">
+                <h2 class="state-title">No Settings Found</h2>
+                <p class="state-description">Preference profiles have not been initialized.</p>
+              </div>
+            </div>
+
+            <!-- State View: Error -->
+            <div class="state-view state-view-error">
+              <div class="error-state">
+                <h2 class="state-title">Failed to Load Preferences</h2>
+                <p class="state-description">Preferences store is temporarily locked.</p>
+                <button class="btn btn-outline" onclick="setPrototypeState('populated')">Retry</button>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- Phone Bottom Navigation Bar -->
+        <div class="phone-bottom-nav">
+          <button class="nav-destination-btn active" id="bottomNavOverview" onclick="navigateToScreen('overview')">
+            <svg style="width:20px;height:20px;fill:currentColor;" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span class="nav-label">Overview</span>
+          </button>
+          <button class="nav-destination-btn" id="bottomNavDetail" onclick="navigateToScreen('detail')">
+            <svg style="width:20px;height:20px;fill:currentColor;" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            <span class="nav-label">Detail</span>
+          </button>
+          <button class="nav-destination-btn" id="bottomNavSettings" onclick="navigateToScreen('settings')">
+            <svg style="width:20px;height:20px;fill:currentColor;" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+            <span class="nav-label">Settings</span>
+          </button>
+        </div>
+
+        <div class="home-indicator-bar">
+          <div class="home-indicator-pill"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: 4-CARD DESIGN SYSTEM CATALOG -->
+    <div class="inspector-panel">
+
+      <!-- CARD 1: LIVE COLOR TOKENS -->
+      <div class="inspector-card">
+        <div>
+          <div class="card-title">
+            <span>Live Color Tokens</span>
+            <span class="badge badge-success" id="inspectorThemeBadge">warm_dark</span>
+          </div>
+          <div class="card-subtitle">Active theme tokens with computed hex values and real-time color swatches</div>
+        </div>
+        <div class="swatches-grid" id="swatchesGridContainer">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- CARD 2: WCAG 2.1 CONTRAST INSPECTOR -->
+      <div class="inspector-card">
+        <div>
+          <div class="card-title">WCAG 2.1 Contrast Inspector</div>
+          <div class="card-subtitle">Real-time relative luminance & contrast ratio validation across semantic pairs</div>
+        </div>
+        <div class="contrast-table-wrapper">
+          <table class="contrast-table">
+            <thead>
+              <tr>
+                <th>Element Pair</th>
+                <th>Foreground Token</th>
+                <th>Background Token</th>
+                <th>Ratio</th>
+                <th>WCAG Level</th>
+              </tr>
+            </thead>
+            <tbody id="contrastTableBody">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CARD 3: TYPOGRAPHY, SHAPE & SPACING TOKENS -->
+      <div class="inspector-card">
+        <div>
+          <div class="card-title">Typography, Shape & Spacing Tokens</div>
+          <div class="card-subtitle">Foundational tokens governing typography scales, corner radii, and spacing grid</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <!-- UI Typography Scale -->
+          <div>
+            <div class="inventory-section-title">UI Typography Scale</div>
+            <table class="token-table">
+              <thead>
+                <tr>
+                  <th>Level</th>
+                  <th>Size</th>
+                  <th>Weight</th>
+                  <th>Usage Scope</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Display Large</td><td>32px</td><td>800</td><td>Hero titles and splash banners</td></tr>
+                <tr><td>Headline Medium</td><td>20px</td><td>800</td><td>Screen app bar headers</td></tr>
+                <tr><td>Title Medium</td><td>16px</td><td>700</td><td>Card titles, modal headings</td></tr>
+                <tr><td>Body Medium</td><td>14px</td><td>400</td><td>Standard body text, descriptions</td></tr>
+                <tr><td>Label Small</td><td>11px</td><td>700</td><td>Badges, chips, navigation labels</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Corner Radius Tokens -->
+          <div>
+            <div class="inventory-section-title">Corner Radius Tokens</div>
+            <table class="token-table">
+              <thead>
+                <tr>
+                  <th>Token Name</th>
+                  <th>CSS Value</th>
+                  <th>Component Usage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>--radius-xs</code></td><td>4px</td><td>Badges, mini tags, progress fills</td></tr>
+                <tr><td><code>--radius-sm</code></td><td>6px</td><td>Buttons, segmented tabs, list rows</td></tr>
+                <tr><td><code>--radius-md</code></td><td>10px</td><td>Standard cards, dialog containers</td></tr>
+                <tr><td><code>--radius-lg</code></td><td>16px</td><td>Inspector cards, hero cards</td></tr>
+                <tr><td><code>--radius-xl</code></td><td>24px</td><td>Bottom sheets, modal surfaces</td></tr>
+                <tr><td><code>--radius-full</code></td><td>9999px</td><td>Pills, chips, avatar rings</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Spacing & Layout Tokens -->
+          <div>
+            <div class="inventory-section-title">Spacing & Layout Tokens</div>
+            <table class="token-table">
+              <thead>
+                <tr>
+                  <th>Token Name</th>
+                  <th>Size</th>
+                  <th>Usage Scope</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>--space-xs</code></td><td>4px</td><td>Tight inline element gaps</td></tr>
+                <tr><td><code>--space-sm</code></td><td>8px</td><td>Chip rows, subtitle spacing</td></tr>
+                <tr><td><code>--space-md</code></td><td>12px</td><td>Card padding, grid gaps</td></tr>
+                <tr><td><code>--space-lg</code></td><td>16px</td><td>Screen horizontal margins</td></tr>
+                <tr><td><code>--space-xl</code></td><td>20px</td><td>Prose text margins</td></tr>
+                <tr><td><code>--space-2xl</code></td><td>24px</td><td>Section dividers, footer clearance</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4: COMPONENT INVENTORY & VARIANTS MATRIX -->
+      <div class="inspector-card">
+        <div>
+          <div class="card-title">Component Inventory & Variants Matrix</div>
+          <div class="card-subtitle">Interactive inventory of foundational primitives and domain components</div>
+        </div>
+
+        <!-- Foundational Primitives -->
+        <div>
+          <div class="inventory-section-title">Foundational Primitives (10 Components)</div>
+          <table class="token-table">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Supported Variants & States</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Top App Bar</td>
+                <td>Standard, Contextual Actions, Back Navigation</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('overview', 'populated')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>Bottom Navigation Bar</td>
+                <td>3 Navigation Destinations with active indicators</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('detail', 'populated')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>Action Buttons</td>
+                <td>Primary, Outline, Hover, Disabled</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('overview', 'populated')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>Status Badges</td>
+                <td>Default, Success, Danger, Count Pills</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('overview', 'populated')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>Data Table</td>
+                <td>Header, Row Borders, Status Cells</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('overview', 'populated')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>State Feedback: Loading</td>
+                <td>Shimmer Placeholders, Title & Body Skeletons</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('overview', 'loading')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>State Feedback: Empty</td>
+                <td>Icon, Contextual Headline, Call to Action</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('overview', 'empty')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>State Feedback: Error</td>
+                <td>Error Icon, Description, Retry Action Button</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('overview', 'error')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>Surface Cards</td>
+                <td>Default Surface, Raised Surface, Container Borders</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('detail', 'populated')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>Theme Switcher Pill</td>
+                <td>Dot Indicators, Active Pill Selection</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('settings', 'populated')">Preview →</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Domain Components -->
+        <div>
+          <div class="inventory-section-title">Domain Components (6 Patterns)</div>
+          <table class="token-table">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Supported Variants & States</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Operational Metrics Grid</td>
+                <td>2-Column KPI Cards with percentage trends</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('overview', 'populated')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>Activity Log Card</td>
+                <td>Transactions and Token synchronization table</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('overview', 'populated')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>Architecture Spec Card</td>
+                <td>2-Tier Token and Boundary explanation block</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('detail', 'populated')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>Topology Selector Card</td>
+                <td>Self-Contained vs Consolidated Toggle view</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('settings', 'populated')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>Theme Quick-Select Grid</td>
+                <td>4-Theme Inline Selector Pad</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('settings', 'populated')">Preview →</button></td>
+              </tr>
+              <tr>
+                <td>Empty Data Re-Init CTA</td>
+                <td>Interactive Sample Data Seeder</td>
+                <td><button class="preview-pill-btn" onclick="previewComponent('overview', 'empty')">Preview →</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-msg" id="toastMessage">Action performed</div>
+
+  <script>
+/* === SECTION: JAVASCRIPT: LOGIC & HARNESS === */
+  const CANDIDATES = {
+    awesome: {
+      key: "awesome",
+      name: "Candidate A: awesome-design-md",
+      badge: "awesome-design-md",
+      label: "Candidate A: awesome-design-md (Industry Benchmark)",
+      tagline: "Curated industry benchmark aesthetic mapped to product domain (Linear / Apple refined tech feel)",
+      font: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      themes: {
+        warm_dark: {
+          background: "#181614",
+          surface: "#211E1B",
+          surfaceContainer: "#2A2521",
+          onBackground: "#E6DFD5",
+          onSurface: "#E6DFD5",
+          onSurfaceVariant: "#A89F93",
+          primary: "#D98A4E",
+          onPrimary: "#2B1708",
+          primaryContainer: "#4A2E16",
+          onPrimaryContainer: "#FFDCC4",
+          secondary: "#7A9A8B",
+          onSecondary: "#12261D",
+          secondaryContainer: "#263D33",
+          onSecondaryContainer: "#BCE0CF"
+        },
+        light: {
+          background: "#FAF8F5",
+          surface: "#FFFFFF",
+          surfaceContainer: "#F0ECE1",
+          onBackground: "#1C1B1A",
+          onSurface: "#1C1B1A",
+          onSurfaceVariant: "#605C56",
+          primary: "#B86528",
+          onPrimary: "#FFFFFF",
+          primaryContainer: "#FDE8D7",
+          onPrimaryContainer: "#3D1C05",
+          secondary: "#536358",
+          onSecondary: "#FFFFFF",
+          secondaryContainer: "#D6E0D9",
+          onSecondaryContainer: "#101E15"
+        },
+        dark: {
+          background: "#111318",
+          surface: "#191C22",
+          surfaceContainer: "#22262F",
+          onBackground: "#E2E2E9",
+          onSurface: "#E2E2E9",
+          onSurfaceVariant: "#939AA6",
+          primary: "#A2C8FF",
+          onPrimary: "#00325B",
+          primaryContainer: "#004880",
+          onPrimaryContainer: "#D3E4FF",
+          secondary: "#BBC7DB",
+          onSecondary: "#253140",
+          secondaryContainer: "#3B4858",
+          onSecondaryContainer: "#D7E3F7"
+        },
+        sepia: {
+          background: "#F4ECD8",
+          surface: "#EFE4C8",
+          surfaceContainer: "#E4D5B7",
+          onBackground: "#2C221E",
+          onSurface: "#2C221E",
+          onSurfaceVariant: "#5C4B3B",
+          primary: "#8C5327",
+          onPrimary: "#FFFFFF",
+          primaryContainer: "#F5D9C1",
+          onPrimaryContainer: "#361B06",
+          secondary: "#4F6D5A",
+          onSecondary: "#FFFFFF",
+          secondaryContainer: "#CFE4D6",
+          onSecondaryContainer: "#14291C"
+        }
+      }
+    },
+    frontend: {
+      key: "frontend",
+      name: "Candidate B: frontend-design",
+      badge: "frontend-design",
+      label: "Candidate B: frontend-design (Bespoke Studio)",
+      tagline: "Distinctive studio visual identity (bespoke typography pairing & terracotta/sage signature)",
+      font: '"Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      themes: {
+        warm_dark: {
+          background: "#1C1917",
+          surface: "#262220",
+          surfaceContainer: "#322D2A",
+          onBackground: "#F5EBE6",
+          onSurface: "#F5EBE6",
+          onSurfaceVariant: "#B5A7A0",
+          primary: "#E07A5F",
+          onPrimary: "#28120B",
+          primaryContainer: "#542519",
+          onPrimaryContainer: "#FFD9CF",
+          secondary: "#81B29A",
+          onSecondary: "#10281F",
+          secondaryContainer: "#284438",
+          onSecondaryContainer: "#C5E6D7"
+        },
+        light: {
+          background: "#FDFBF7",
+          surface: "#FFFFFF",
+          surfaceContainer: "#F4ECE4",
+          onBackground: "#241D1A",
+          onSurface: "#241D1A",
+          onSurfaceVariant: "#695D56",
+          primary: "#C85A32",
+          onPrimary: "#FFFFFF",
+          primaryContainer: "#FCE2D8",
+          onPrimaryContainer: "#401305",
+          secondary: "#3D6B58",
+          onSecondary: "#FFFFFF",
+          secondaryContainer: "#D3E5DC",
+          onSecondaryContainer: "#0C2319"
+        },
+        dark: {
+          background: "#141519",
+          surface: "#1D1E24",
+          surfaceContainer: "#262832",
+          onBackground: "#ECEEF5",
+          onSurface: "#ECEEF5",
+          onSurfaceVariant: "#9A9EAF",
+          primary: "#F28482",
+          onPrimary: "#381112",
+          primaryContainer: "#5C2023",
+          onPrimaryContainer: "#FFD9DA",
+          secondary: "#84A59D",
+          onSecondary: "#122622",
+          secondaryContainer: "#2A423C",
+          onSecondaryContainer: "#C7DDD7"
+        },
+        sepia: {
+          background: "#F6EFE6",
+          surface: "#EFE4D6",
+          surfaceContainer: "#E5D5C1",
+          onBackground: "#2D221B",
+          onSurface: "#2D221B",
+          onSurfaceVariant: "#625044",
+          primary: "#A24936",
+          onPrimary: "#FFFFFF",
+          primaryContainer: "#F7DACF",
+          onPrimaryContainer: "#3A120B",
+          secondary: "#3E5C50",
+          onSecondary: "#FFFFFF",
+          secondaryContainer: "#CCE0D7",
+          onSecondaryContainer: "#0E241A"
+        }
+      }
+    },
+    taste: {
+      key: "taste",
+      name: "Candidate C: design-taste-frontend",
+      badge: "design-taste-frontend",
+      label: "Candidate C: design-taste-frontend (Anti-Slop Modern)",
+      tagline: "Anti-slop modern utility design system (audit-verified density & electric indigo/cyan elevation)",
+      font: '"Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace, sans-serif',
+      themes: {
+        warm_dark: {
+          background: "#141418",
+          surface: "#1C1C24",
+          surfaceContainer: "#242530",
+          onBackground: "#ECECF2",
+          onSurface: "#ECECF2",
+          onSurfaceVariant: "#9C9DB0",
+          primary: "#6366F1",
+          onPrimary: "#0C0D2E",
+          primaryContainer: "#2D2F73",
+          onPrimaryContainer: "#E0E2FF",
+          secondary: "#06B6D4",
+          onSecondary: "#02252C",
+          secondaryContainer: "#0E4854",
+          onSecondaryContainer: "#C2F4FC"
+        },
+        light: {
+          background: "#F8F9FA",
+          surface: "#FFFFFF",
+          surfaceContainer: "#EDEFF3",
+          onBackground: "#13161C",
+          onSurface: "#13161C",
+          onSurfaceVariant: "#5A6170",
+          primary: "#4F46E5",
+          onPrimary: "#FFFFFF",
+          primaryContainer: "#E0E2FE",
+          onPrimaryContainer: "#15124D",
+          secondary: "#0891B2",
+          onSecondary: "#FFFFFF",
+          secondaryContainer: "#CFFAFE",
+          onSecondaryContainer: "#083344"
+        },
+        dark: {
+          background: "#0D1117",
+          surface: "#161B22",
+          surfaceContainer: "#21262D",
+          onBackground: "#E6EDF3",
+          onSurface: "#E6EDF3",
+          onSurfaceVariant: "#8B949E",
+          primary: "#818CF8",
+          onPrimary: "#0C1033",
+          primaryContainer: "#1E2761",
+          onPrimaryContainer: "#E0E7FF",
+          secondary: "#22D3EE",
+          onSecondary: "#042830",
+          secondaryContainer: "#0C4A57",
+          onSecondaryContainer: "#CFFAFE"
+        },
+        sepia: {
+          background: "#F5EFE3",
+          surface: "#ECE3D3",
+          surfaceContainer: "#DFD3BF",
+          onBackground: "#25211B",
+          onSurface: "#25211B",
+          onSurfaceVariant: "#595045",
+          primary: "#5548C8",
+          onPrimary: "#FFFFFF",
+          primaryContainer: "#E3E0FA",
+          onPrimaryContainer: "#1F1754",
+          secondary: "#0E7490",
+          onSecondary: "#FFFFFF",
+          secondaryContainer: "#CEEEF7",
+          onSecondaryContainer: "#082F3B"
+        }
+      }
+    }
+  };
+
+  const THEMES = {
+    warm_dark: { name: "Warm Dark", tag: "warm_dark" },
+    light: { name: "Light", tag: "light" },
+    dark: { name: "Dark", tag: "dark" },
+    sepia: { name: "Sepia", tag: "sepia" }
+  };
+
+  let activeThemeKey = "warm_dark";
+  let activeStateKey = "populated";
+  let activeScreenKey = "overview";
+  let activeCandidateKey = "awesome";
+  let mvpCandidateKey = "awesome";
+
+  // Recover MVP preference from localStorage if available
+  try {
+    const savedMvp = localStorage.getItem("prototype_mvp_candidate");
+    if (savedMvp && CANDIDATES[savedMvp]) {
+      mvpCandidateKey = savedMvp;
+      activeCandidateKey = savedMvp;
+    }
+  } catch (e) {
+    // localStorage optional/fallback
+  }
+
+  function getActiveTokens() {
+    const cand = CANDIDATES[activeCandidateKey] || CANDIDATES.awesome;
+    return cand.themes[activeThemeKey];
+  }
+
+  /* 1. STATE SIMULATOR CONTROLLER */
+  function setPrototypeState(state) {
+    activeStateKey = state;
+    document.documentElement.setAttribute("data-state", state);
+    document.body.setAttribute("data-state", state);
+
+    document.querySelectorAll(".state-pill").forEach(pill => {
+      pill.classList.toggle("active", pill.getAttribute("data-set-state") === state);
+    });
+
+    showToast(`State set to: ${state}`);
+  }
+
+  /* 2. THEME APPLICATION CONTROLLER */
+  function setAppTheme(themeKey) {
+    if (!THEMES[themeKey]) return;
+    activeThemeKey = themeKey;
+    document.documentElement.setAttribute("data-theme", themeKey);
+    document.body.setAttribute("data-theme", themeKey);
+
+    document.querySelectorAll(".theme-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-theme-target") === themeKey);
+    });
+
+    const badge = document.getElementById("inspectorThemeBadge");
+    if (badge) badge.textContent = themeKey;
+
+    renderThemeSwatches();
+    renderContrastTable();
+    showToast(`Switched theme to ${THEMES[themeKey].name}`);
+  }
+
+  /* 3. SCREEN NAVIGATION CONTROLLER */
+  function navigateToScreen(screenKey) {
+    activeScreenKey = screenKey;
+
+    document.querySelectorAll(".screen-jump-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-screen-btn") === screenKey);
+    });
+
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active-screen"));
+    const targetScreen = document.getElementById("screen-" + screenKey);
+    if (targetScreen) targetScreen.classList.add("active-screen");
+
+    // Update bottom nav
+    document.querySelectorAll(".nav-destination-btn").forEach(btn => btn.classList.remove("active"));
+    const capKey = screenKey.charAt(0).toUpperCase() + screenKey.slice(1);
+    const bottomBtn = document.getElementById("bottomNav" + capKey);
+    if (bottomBtn) bottomBtn.classList.add("active");
+
+    // Update top bar
+    const titleEl = document.getElementById("phoneTopBarTitle");
+    const backBtn = document.getElementById("phoneBackBtn");
+    if (titleEl) titleEl.textContent = capKey;
+    if (backBtn) backBtn.style.display = (screenKey === "overview") ? "none" : "flex";
+
+    showToast(`Navigated to: ${capKey}`);
+  }
+
+  /* 4. THEME SWATCHES RENDERING */
+  function renderThemeSwatches() {
+    const container = document.getElementById("swatchesGridContainer");
+    if (!container) return;
+    container.innerHTML = "";
+
+    const tokens = getActiveTokens();
+    for (const [key, hex] of Object.entries(tokens)) {
+      const item = document.createElement("div");
+      item.className = "swatch-item";
+      item.innerHTML = `
+        <div class="swatch-color-box" style="background:${hex};"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">${key}</div>
+          <div class="swatch-hex">${hex}</div>
+        </div>
+      `;
+      container.appendChild(item);
+    }
+  }
+
+  /* 5. WCAG 2.1 CONTRAST COMPUTATION */
+  function hexToRgb(hex) {
+    let c = hex.replace("#", "").trim();
+    if (c.length === 3) {
+      c = c.split("").map(x => x + x).join("");
+    }
+    const num = parseInt(c, 16);
+    return {
+      r: (num >> 16) & 255,
+      g: (num >> 8) & 255,
+      b: num & 255
+    };
+  }
+
+  function relativeLuminance(rgb) {
+    const [r, g, b] = [rgb.r, rgb.g, rgb.b].map(v => {
+      const s = v / 255;
+      return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+
+  function calculateLuminance(hex) {
+    return relativeLuminance(hexToRgb(hex));
+  }
+
+  function calculateContrastRatio(hex1, hex2) {
+    const lum1 = calculateLuminance(hex1);
+    const lum2 = calculateLuminance(hex2);
+    const brightest = Math.max(lum1, lum2);
+    const darkest = Math.min(lum1, lum2);
+    return (brightest + 0.05) / (darkest + 0.05);
+  }
+
+  function renderContrastTable() {
+    const tbody = document.getElementById("contrastTableBody");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    const tokens = getActiveTokens();
+    const pairs = [
+      { label: "Primary / Surface", fgKey: "primary", bgKey: "surface" },
+      { label: "OnPrimary / Primary", fgKey: "onPrimary", bgKey: "primary" },
+      { label: "OnSurface / Background", fgKey: "onSurface", bgKey: "background" },
+      { label: "OnSurface / Surface", fgKey: "onSurface", bgKey: "surface" },
+      { label: "OnSurfaceVar / Surface", fgKey: "onSurfaceVariant", bgKey: "surface" },
+      { label: "OnPrimaryContainer / PrimaryContainer", fgKey: "onPrimaryContainer", bgKey: "primaryContainer" },
+      { label: "Secondary / Surface", fgKey: "secondary", bgKey: "surface" },
+      { label: "OnSecondaryContainer / SecondaryContainer", fgKey: "onSecondaryContainer", bgKey: "secondaryContainer" }
+    ];
+
+    pairs.forEach(pair => {
+      const fgHex = tokens[pair.fgKey];
+      const bgHex = tokens[pair.bgKey];
+      const ratio = calculateContrastRatio(fgHex, bgHex);
+      const formattedRatio = ratio.toFixed(2) + ":1";
+
+      let badgeClass = "fail";
+      let badgeLabel = "FAIL";
+      if (ratio >= 7.0) {
+        badgeClass = "pass";
+        badgeLabel = "AAA (Pass)";
+      } else if (ratio >= 4.5) {
+        badgeClass = "pass";
+        badgeLabel = "AA (Pass)";
+      } else if (ratio >= 3.0) {
+        badgeClass = "pass";
+        badgeLabel = "AA Large";
+      }
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="font-weight:700;">${pair.label}</td>
+        <td><code>${pair.fgKey}</code> <span style="opacity:0.7;">(${fgHex})</span></td>
+        <td><code>${pair.bgKey}</code> <span style="opacity:0.7;">(${bgHex})</span></td>
+        <td style="font-family:monospace;font-weight:700;">${formattedRatio}</td>
+        <td><span class="contrast-badge ${badgeClass}">${badgeLabel}</span></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* 6. CANDIDATE EXPLORATION & MVP PROMOTION */
+  function setCandidate(candidateKey) {
+    if (!CANDIDATES[candidateKey]) return;
+    activeCandidateKey = candidateKey;
+    document.documentElement.setAttribute("data-candidate", candidateKey);
+    document.body.setAttribute("data-candidate", candidateKey);
+
+    document.querySelectorAll(".candidate-pill").forEach(pill => {
+      pill.classList.toggle("active", pill.getAttribute("data-candidate-btn") === candidateKey);
+    });
+
+    renderThemeSwatches();
+    renderContrastTable();
+    updateMvpBadge();
+    showToast(`Active Candidate: ${CANDIDATES[candidateKey].label}`);
+  }
+
+  function setAsMvp() {
+    mvpCandidateKey = activeCandidateKey;
+    try {
+      localStorage.setItem("prototype_mvp_candidate", mvpCandidateKey);
+    } catch (e) {
+      console.warn("localStorage unavailable:", e);
+    }
+    updateMvpBadge();
+    showToast(`★ Candidate [${CANDIDATES[mvpCandidateKey].badge}] promoted to Canonical MVP Contract!`);
+  }
+
+  function updateMvpBadge() {
+    const badge = document.getElementById("mvpStatusBadge");
+    if (badge && CANDIDATES[mvpCandidateKey]) {
+      const isCurrent = (activeCandidateKey === mvpCandidateKey);
+      badge.textContent = isCurrent 
+        ? `★ MVP: ${CANDIDATES[mvpCandidateKey].badge}` 
+        : `MVP: ${CANDIDATES[mvpCandidateKey].badge}`;
+    }
+  }
+
+  /* 7. INTERACTIVE COMPONENT PREVIEW TRIGGER */
+  function previewComponent(screenKey, stateKey) {
+    navigateToScreen(screenKey);
+    if (stateKey) {
+      setPrototypeState(stateKey);
+    }
+    showToast(`Previewing: ${screenKey} (${stateKey || 'populated'})`);
+  }
+
+  /* 8. TOAST NOTIFICATION */
+  let toastTimeout = null;
+  function showToast(msg) {
+    const toast = document.getElementById("toastMessage");
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add("show");
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      toast.classList.remove("show");
+    }, 2200);
+  }
+
+  /* 9. INITIALIZATION */
+  document.addEventListener("DOMContentLoaded", () => {
+    setCandidate(activeCandidateKey);
+    updateMvpBadge();
+    renderThemeSwatches();
+    renderContrastTable();
+    navigateToScreen("overview");
+  });
+  </script>
+</body>
+</html>
