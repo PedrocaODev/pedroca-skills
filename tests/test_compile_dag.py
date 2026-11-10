@@ -20,11 +20,11 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # Add scripts and orchestrator paths to sys.path
-TO_TICKETS_SCRIPTS = REPO_ROOT / "to-tickets" / "scripts"
+TO_TICKETS_SCRIPTS = REPO_ROOT / "skills" / "spine" / "to-tickets" / "scripts"
 if str(TO_TICKETS_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(TO_TICKETS_SCRIPTS))
 
-HERDR_DIR = REPO_ROOT / "herdr-orchestration"
+HERDR_DIR = REPO_ROOT / "skills" / "spine" / "herdr-orchestration"
 if str(HERDR_DIR) not in sys.path:
     sys.path.insert(0, str(HERDR_DIR))
 

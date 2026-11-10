@@ -159,12 +159,18 @@ def test_skill_lock_no_mattpocock():
 
 
 def test_retired_skills_absent():
-    """Verify none of the retired skills or nested duplicates exist under repo root."""
+    """Verify none of the retired skills or nested duplicates exist under repo root or skills."""
     present = []
     for rel_path in RETIRED_SKILL_PATHS:
         target = REPO_ROOT / rel_path
         if target.exists():
             present.append(rel_path)
+        skills_target = REPO_ROOT / "skills" / rel_path
+        if skills_target.exists():
+            present.append(f"skills/{rel_path}")
+        for layer_target in REPO_ROOT.glob(f"skills/*/{rel_path}"):
+            if layer_target.exists():
+                present.append(str(layer_target.relative_to(REPO_ROOT)))
 
     assert not present, f"Retired skill directories or nested duplicates found under repo root: {present}"
 
@@ -175,7 +181,9 @@ def test_lane_skills_no_stale_references():
     stale_patterns = ["setup-matt-pocock-skills", "docs/agents/issue-tracker.md"]
 
     for skill_name in LANE_SKILLS:
-        skill_dir = REPO_ROOT / skill_name
+        matches = list(REPO_ROOT.glob(f"skills/**/{skill_name}"))
+        assert matches, f"Expected lane skill directory to exist under skills/: {skill_name}"
+        skill_dir = matches[0]
         assert skill_dir.is_dir(), f"Expected lane skill directory to exist: {skill_dir}"
         for md_file in skill_dir.rglob("*.md"):
             content = md_file.read_text(encoding="utf-8", errors="ignore")
@@ -193,7 +201,7 @@ def test_all_skills_no_setup_matt_pocock_references():
 
     Skips parallel lane skills (to-spec, to-tickets) pending Stage 2 integration merge.
     """
-    skill_files = list(REPO_ROOT.glob("*/SKILL.md"))
+    skill_files = list(REPO_ROOT.glob("skills/**/SKILL.md"))
     assert skill_files, "No SKILL.md files found in repository"
 
     non_parallel_violations = []
@@ -239,7 +247,7 @@ def test_akashic_lint_strict_vault():
 
 def test_ask_pedroca_skill_contract():
     """Verify ask-pedroca/SKILL.md exists and satisfies router contract and terminology."""
-    skill_path = REPO_ROOT / "ask-pedroca" / "SKILL.md"
+    skill_path = REPO_ROOT / "skills" / "foundations" / "ask-pedroca" / "SKILL.md"
     assert skill_path.is_file(), f"Expected skill file to exist at {skill_path}"
 
     content = skill_path.read_text(encoding="utf-8")
@@ -268,7 +276,7 @@ def test_ask_pedroca_skill_contract():
 
 def test_improve_codebase_architecture_akashic_tools():
     """Verify improve-codebase-architecture/SKILL.md exists and references deterministic Akashic Code Graph tools."""
-    skill_path = REPO_ROOT / "improve-codebase-architecture" / "SKILL.md"
+    skill_path = REPO_ROOT / "skills" / "upkeep" / "improve-codebase-architecture" / "SKILL.md"
     assert skill_path.is_file(), f"Expected skill file to exist at {skill_path}"
 
     content = skill_path.read_text(encoding="utf-8")

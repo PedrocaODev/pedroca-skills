@@ -9,7 +9,7 @@ import pytest
 
 # Ensure herdr-orchestration is importable
 REPO_ROOT = Path(__file__).resolve().parent.parent
-HERDR_DIR = REPO_ROOT / "herdr-orchestration"
+HERDR_DIR = REPO_ROOT / "skills" / "spine" / "herdr-orchestration"
 if str(HERDR_DIR) not in sys.path:
     sys.path.insert(0, str(HERDR_DIR))
 

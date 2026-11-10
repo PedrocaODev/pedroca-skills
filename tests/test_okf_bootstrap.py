@@ -15,7 +15,7 @@ from pathlib import Path
 import pytest
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SCRIPTS_DIR = REPO_ROOT / "setup-pedroca-skills" / "scripts"
+SCRIPTS_DIR = REPO_ROOT / "skills" / "foundations" / "setup-pedroca-skills" / "scripts"
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 

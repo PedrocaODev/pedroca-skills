@@ -533,6 +533,8 @@ def _get_lane_config_classes():
         current_file = Path(__file__).resolve()
         candidates = [
             current_file.parent.parent.parent / "herdr-orchestration",
+            current_file.parent.parent.parent.parent / "skills" / "spine" / "herdr-orchestration",
+            Path.cwd() / "skills" / "spine" / "herdr-orchestration",
             current_file.parent.parent / "herdr-orchestration",
             Path.cwd() / "herdr-orchestration",
         ]
