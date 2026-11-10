@@ -86,6 +86,8 @@ Specialized tools and procedures that operate outside the main linear flow:
 - **`research`** — Background research agent that queries authoritative external docs and APIs, capturing findings in a cited Markdown report.
 - **`resolving-merge-conflicts`** — Intent-based Git merge and rebase conflict resolution, reconciling conflicting hunks against their original commits.
 - **`handoff`** — Creates a portable session-transition document (`/tmp/handoff-*.md`) for transferring state across sessions, harnesses, or directories.
+- **`pr`** — Environment-agnostic review submission and evidence formatting.
+  Prepares coordinated delivery packages decoupling code review hosting (Gerrit changes, GitHub PRs, GitLab MRs, local Vault) from project management and verification tracking (Jira, Linear, GitHub Issues, Vault). Formats commit messages with Change-Ids, visual diff sketches, risk assessments, and test execution evidence packages.
 - **`wizard`** — Interactive terminal assistant for tasks that require human authorization or manual execution (provisioning cloud secrets, third-party auth, one-off migrations).
 
 ---

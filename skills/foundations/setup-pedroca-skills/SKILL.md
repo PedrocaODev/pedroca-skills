@@ -49,6 +49,11 @@ default_spine = ["grill-with-docs", "to-spec", "to-tickets", "herdr-orchestratio
 adapter = "vault"
 tickets_dir = "docs/tickets"
 
+[workflow.review]
+adapter = "vault"
+remote = "origin"
+base_branch = "main"
+
 [workflow.docs]
 adapter = "vault"
 specs_dir = "docs/specs"
@@ -134,14 +139,44 @@ Generates `docs/tickets/user-auth/01-jwt-tokens.md` with:
 
 ---
 
-### 4. External Tracker and Docs Adapters (Opt-in)
+### 4. External Tracker, Review, and Docs Adapters (Opt-in)
 
-The framework defaults to the local vault (`adapter = "vault"`). If your team explicitly requests external issue tracking or document management:
+The framework defaults to the local vault (`adapter = "vault"`). If your team explicitly requests external issue tracking, code review hosting, or document management:
 
-- **GitHub Issues**: Set `[workflow.tracker] adapter = "github"`. Skills will use the `gh` CLI for ticket creation and triage.
-- **GitLab Issues**: Set `[workflow.tracker] adapter = "gitlab"`. Skills will use the `glab` CLI.
-- **Linear / Jira**: Set `[workflow.tracker] adapter = "linear"` or `"jira"`. Specify team IDs and ticket prefix mapping.
-- **Notion / Confluence**: Set `[workflow.docs] adapter = "notion"` or `"confluence"`.
+- **Review Adapters (`[workflow.review]`)**:
+  - `adapter = "gerrit"`: Formats review submissions as standard Git commit messages (`Change-Id: I...`, `Bug: <KEY>`) delivered via `git review` or `git push origin HEAD:refs/for/<base_branch>`.
+  - `adapter = "github"`: Uses the GitHub CLI (`gh pr create`).
+  - `adapter = "gitlab"`: Uses the GitLab CLI (`glab mr create`).
+  - `adapter = "vault"`: Conventional commits and local handoff receipts (`/tmp/handoff-*.md`).
+  - Options include `remote = "origin"` and `base_branch = "main"` (or `"master"`).
+
+- **Tracker Adapters (`[workflow.tracker]`)**:
+  - **GitHub Issues**: Set `[workflow.tracker] adapter = "github"`. Skills will use the `gh` CLI for ticket creation and triage.
+  - **GitLab Issues**: Set `[workflow.tracker] adapter = "gitlab"`. Skills will use the `glab` CLI.
+  - **Linear / Jira**: Set `[workflow.tracker] adapter = "linear"` or `"jira"`. Specify team IDs and ticket prefix mapping.
+
+- **Docs Adapters (`[workflow.docs]`)**:
+  - **Notion / Confluence**: Set `[workflow.docs] adapter = "notion"` or `"confluence"`.
+
+#### Enterprise Decoupled Setup: Gerrit + Jira Example
+
+Real production environments frequently decouple code review hosting (Gerrit) from issue tracking (Jira). Configure `config/akashic.toml`:
+
+```toml
+[workflow.review]
+adapter = "gerrit"
+remote = "origin"
+base_branch = "main"
+
+[workflow.tracker]
+adapter = "jira"
+project_key = "PROJ"
+tickets_dir = "docs/tickets"
+```
+
+In this setup, `pr` coordinates two distinct deliverables:
+1. **Package A (Git Review)**: Clean Gerrit commit message with imperative summary, architectural diff-sketch, `Bug: PROJ-123`, and `Change-Id: I...`.
+2. **Package B (Tracker Evidence)**: Rich Jira comment with Before/After test runs, visual evidence, risk profile, and Gerrit change link.
 
 ---
 

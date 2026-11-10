@@ -116,6 +116,11 @@ default_spine = ["grill-with-docs", "to-spec", "to-tickets", "herdr-orchestratio
 adapter = "vault"
 tickets_dir = "{vault_path}/tickets"
 
+[workflow.review]
+adapter = "vault"
+remote = "origin"
+base_branch = "main"
+
 [workflow.docs]
 adapter = "vault"
 specs_dir = "{vault_path}/specs"
