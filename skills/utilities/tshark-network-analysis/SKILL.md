@@ -27,7 +27,6 @@ description: Analyzes pcap/pcapng capture files using tshark (Wireshark CLI) for
 
 ### Shell discipline
 
-- Always prefix commands with `rtk`
 - Always quote file paths containing spaces
 - Bound output: use `-c <count>` or `-T fields` with selected columns
 - Prefer focused display filters (`-Y`) over raw payload dumps
@@ -41,7 +40,7 @@ description: Analyzes pcap/pcapng capture files using tshark (Wireshark CLI) for
 
 Live capture requires ALL of these before proceeding:
 1. Explicit user request and authorization
-2. Confirmed interface name (`rtk tshark -D`)
+2. Confirmed interface name (`tshark -D`)
 3. Defined output path for the capture file
 4. Capture filter specified (or explicitly none)
 5. Hard bound: duration (`-a duration:<sec>`), packet count (`-c`), or file size (`-a filesize:<KB>`)
@@ -71,23 +70,23 @@ Never start an unbounded capture.
 ### Offline overview (metadata-first)
 
 ```bash
-rtk tshark -r "capture.pcap" -q -z io,stat,0 -z conv,ip -z endpoints,ip
+tshark -r "capture.pcap" -q -z io,stat,0 -z conv,ip -z endpoints,ip
 ```
 
 ### Protocol hierarchy
 
 ```bash
-rtk tshark -r "capture.pcap" -q -z io,phs
+tshark -r "capture.pcap" -q -z io,phs
 ```
 
 ### Bounded display-filter read
 
 ```bash
-rtk tshark -r "capture.pcap" -Y "tcp.port == 443" -c 100 -T fields -e frame.number -e ip.src -e ip.dst -e tcp.srcport -e tcp.dstport -e frame.len
+tshark -r "capture.pcap" -Y "tcp.port == 443" -c 100 -T fields -e frame.number -e ip.src -e ip.dst -e tcp.srcport -e tcp.dstport -e frame.len
 ```
 
 ### Bounded live capture (requires explicit authorization)
 
 ```bash
-rtk tshark -i eth0 -f "tcp port 80" -w "/tmp/capture.pcap" -a duration:60 -a filesize:10240
+tshark -i eth0 -f "tcp port 80" -w "/tmp/capture.pcap" -a duration:60 -a filesize:10240
 ```
