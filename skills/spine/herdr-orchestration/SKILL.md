@@ -12,7 +12,7 @@ Coordinate parallel engineering initiatives across isolated Git worktrees groupe
 
 1. **Two-Tier Agent Model**:
    - **Tier 1 (Herdr Multiplexer)**: Owns process isolation, terminal panes, Git worktree lifecycles, and agent process state (`working`, `idle`, `done`, `blocked`).
-   - **Tier 2 (In-Session Specialist Subagents & Lanes)**: Each Lane runs an Antigravity agent that delegates bounded work to in-session Specialist Subagents (`fixer`, `craftsman`, `runner`, `integrator`), operating strictly inside their dedicated worktrees and emitting structured artifacts without context bleeding.
+   - **Tier 2 (In-Session Specialist Subagents & Lanes)**: Each Lane runs a dedicated agent that delegates bounded work to in-session Specialist Subagents (`fixer`, `craftsman`, `runner`, `integrator`), operating strictly inside their dedicated worktrees and emitting structured artifacts without context bleeding.
 2. **Hierarchical Worktree Spaces in Herdr SPACES Sidebar**:
    - Lanes are provisioned as native Git worktrees grouped under the target repository's Space in Herdr's SPACES sidebar.
    - In Herdr's TUI, the SPACES sidebar displays a hierarchical tree:
@@ -254,7 +254,7 @@ WORKTREE_DIR=$(echo "$CREATE_RESP" | jq -r '.result.worktree.path // .result.wor
 LANE_WS_IDS+=("$LANE_WS_ID")
 printf 'Lane %s provisioned: ws=%s pane=%s dir=%s\n' "$LANE" "$LANE_WS_ID" "$PANE_ID" "$WORKTREE_DIR"
 
-# 3. Start Antigravity agent in the worktree workspace's root pane
+# 3. Start lane agent in the worktree workspace's root pane
 herdr agent start "$LANE" --kind agy --pane "$PANE_ID"
 
 # 4. Handle project trust prompt if blocked (defensive fallback; workspace trust is handled automatically on startup by the `agy` wrapper)
@@ -347,14 +347,14 @@ herdr agent prompt "$LANE" "$PROMPT" --wait --timeout 600000 &
 ```
 
 ### 3.3 Event-Driven Lifecycle Monitoring & Blocked State Trapping
-Track active lane agents using the event-driven status watcher [`subagent/watcher.py`](subagent/watcher.py) combined with Antigravity's background task reactive wakeup. This replaces manual polling loops with real-time socket events (`pane.agent_status_changed`).
+Track active lane agents using the event-driven status watcher [`subagent/watcher.py`](subagent/watcher.py) combined with the harness reactive event listener or background watcher task. This replaces manual polling loops with real-time socket events (`pane.agent_status_changed`).
 
 #### 1. Launch Event Watcher Background Task
 Locate the portable skill directory and spawn `subagent/watcher.py` via `run_command` with `WaitMsBeforeAsync=500` watching all active phase lanes:
 
 ```bash
-# Locate self-contained skill directory (supports skills.sh installs in local .agents/skills or ~/.gemini/skills)
-SKILL_DIR="${HERDR_ORCHESTRATION_DIR:-$(find "${PWD}" ~/.gemini/skills ~/.agents/skills -maxdepth 3 -type d -name "herdr-orchestration" 2>/dev/null | head -n 1)}"
+# Locate self-contained skill directory (supports skills.sh installs in local .agents/skills or "${HOME}/.agents/skills")
+SKILL_DIR="${HERDR_ORCHESTRATION_DIR:-$(find "${PWD}" "${HOME}/.agents/skills" -maxdepth 3 -type d -name "herdr-orchestration" 2>/dev/null | head -n 1)}"
 python3 "${SKILL_DIR}/subagent/watcher.py" \
   --lanes "${ACTIVE_LANES[@]}" \
   --until idle,done,blocked \
@@ -364,7 +364,7 @@ python3 "${SKILL_DIR}/subagent/watcher.py" \
 #### 2. Yield Turn for Reactive Wakeup
 Launching `run_command` with `WaitMsBeforeAsync=500` starts the watcher command and transitions it to an asynchronous background task once 500ms elapses.
 
-End your turn immediately after launching the watcher task (call no more tools). Antigravity automatically yields execution and resumes the orchestrator turn via Reactive Wakeup when the background watcher task exits or emits its completion notification message. Never use timers or manual polling loops (`herdr agent list`, `sleep`, or `cron`) while waiting for lane transitions.
+End your turn immediately after launching the watcher task (call no more tools). The harness automatically yields execution and resumes the orchestrator turn via reactive wakeup when the background watcher task exits or emits its completion notification message. Never use timers or manual polling loops (`herdr agent list`, `sleep`, or `cron`) while waiting for lane transitions.
 
 #### 3. Parse Match Result
 Inspect the JSON payload returned by the watcher on task completion:

@@ -59,7 +59,7 @@ flowchart TD
 
 ## Stage 2: TDD Vertical Slices & Tier-2 Specialist Subagents
 
-Implement the work in incremental, test-driven vertical slices following `GEMINI.md` Tier-2 Specialist Subagent delegation rules:
+Implement the work in incremental, test-driven vertical slices following `AGENTS.md` Tier-2 Specialist Subagent delegation rules:
 
 1. **Role Boundary — Orchestrator Does Not Edit Code**:
    - The session orchestrator directs research, strategy, planning, and delegation.
@@ -70,8 +70,8 @@ Implement the work in incremental, test-driven vertical slices following `GEMINI
    - **GREEN Phase**: Delegate minimal implementation diffs to `fixer`.
    - **REFACTOR Phase**: Simplify and clean code while maintaining tests green.
 3. **Subagent Delegation Protocol**:
-   - Bounded diffs and fixes: Delegate to `fixer` (Tier: `gemini-3.8-flash-medium`).
-   - Complex refactoring or advanced state logic: Delegate to `craftsman` (Tier: `gemini-3.8-flash-high`).
+   - Bounded diffs and fixes: Delegate to `fixer` (Tier: Balanced Workhorse Tier).
+   - Complex refactoring or advanced state logic: Delegate to `craftsman` (Tier: Advanced Implementation Tier).
    - Each delegation must specify the exact file boundaries and objective.
 
 ---
@@ -81,16 +81,16 @@ Implement the work in incremental, test-driven vertical slices following `GEMINI
 Every change must pass through deterministic verification:
 
 1. **Read-Only Verification Gate (`runner`)**:
-   - Delegate test and build execution to the `runner` subagent (Tier: `gemini-3.8-flash-low`).
+   - Delegate test and build execution to the `runner` subagent (Tier: Routine Execution Tier).
    - Run typechecking, targeted unit tests regularly during slicing, and the full scope test suite before completion.
    - The gate requires a deterministic verdict: `runner` must report `VERDICT: PASSED`.
 2. **Two-Attempt Remediation Limit**:
    - If `runner` reports `VERDICT: FAILED`, provide the failure diagnostics to `fixer` for Attempt 1.
    - If Attempt 2 also fails verification, halt direct fix attempts.
 3. **Escalation Protocol**:
-   - Delegate failure logs, diff history, and unresolved issues to `evaluator` (Tier: `gemini-3.8-flash-high`).
+   - Delegate failure logs, diff history, and unresolved issues to `evaluator` (Tier: Advanced Routing & Triage Tier).
    - If `evaluator` issues `DECISION: RESOLVED`, route remediation instructions back to `fixer` (or `craftsman`).
-   - If `evaluator` issues `DECISION: ESCALATE`, escalate to `oracle` (Tier: `gemini-4-argon-high`) for architectural root-cause analysis before applying the fix.
+   - If `evaluator` issues `DECISION: ESCALATE`, escalate to `oracle` (Tier: Frontier Reasoning Tier) for architectural root-cause analysis before applying the fix.
 
 ---
 
@@ -107,7 +107,7 @@ Before committing changes, execute a pre-commit review using `/code-review` prin
 ## Stage 5: Git Delivery Gate (`integrator`)
 
 1. **Delegate Delivery to `integrator`**:
-   - Git operations (staging, branching, committing) must be delegated to the `integrator` subagent (Tier: `gemini-3.8-flash-medium`).
+   - Git operations (staging, branching, committing) must be delegated to the `integrator` subagent (Tier: Balanced Delivery Tier).
 2. **Scoped Staging & Commit**:
    - Scope staging strictly to files within the assigned file boundaries.
    - Never use blanket `git add .` or commit untracked foreign artifacts.

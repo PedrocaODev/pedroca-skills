@@ -8,7 +8,7 @@ description: Onboard a repository to the Pedroca Skills framework — configure 
 Onboard this repository to the Pedroca Skills framework and scaffold the per-repository configuration:
 
 1. **Akashic OKF v0.2 Vault Configuration** (`config/akashic.toml`) — establishes `docs/` as the default local artifact store (`vault.path = "docs"`), creates `docs/adr/`, `docs/specs/`, and `docs/tickets/`, and configures OKF v0.2 lint rules (`L001`-`L012`).
-2. **Akashic MCP Server Verification & Invariants** — explains why `akashic-mcp` must be enabled and verified, guiding the active harness to enforce it via native lifecycle hooks or fallback workspace rules (`AGENTS.md` / `GEMINI.md`) and Git `pre-commit` hooks.
+2. **Akashic MCP Server Verification & Invariants** — explains why `akashic-mcp` must be enabled and verified, guiding the active harness to enforce it via native lifecycle hooks or fallback workspace rules (`AGENTS.md`) and Git `pre-commit` hooks.
 3. **External Tracker & Docs Adapters (Opt-in)** — defaults to the local Akashic Vault (`docs/`); offers opt-in adapters for external issue trackers (GitHub Issues, GitLab, Linear, Jira) and documentation tools (Notion, Confluence) only when explicitly requested.
 4. **Agent Guidelines Integration** — records the workflow spine and artifact pointers in `AGENTS.md` or `CLAUDE.md`.
 
@@ -73,7 +73,7 @@ The Pedroca Skills workflow spine relies on deterministic, machine-readable code
 
 #### Harness Integration
 Rather than injecting ad-hoc checks into individual skills, configure enforcement natively in your coding harness:
-- **Harnesses with MCP configuration (Antigravity CLI, Claude Code, Cursor)**: Ensure the `akashic` MCP server is registered in your harness settings:
+- **Harnesses with MCP configuration (e.g. Claude Code, Cursor, Codex, Antigravity CLI)**: Ensure the `akashic` MCP server is registered in your harness settings:
   ```json
   {
     "mcpServers": {
@@ -85,7 +85,7 @@ Rather than injecting ad-hoc checks into individual skills, configure enforcemen
   }
   ```
 - **Harnesses with session hooks**: Add a session startup check verifying `which akashic` and `akashic lint --strict`.
-- **Workspace Rule Fallback (`AGENTS.md` / `GEMINI.md`)**: Document the requirement in your root agent instructions so any agent working in the repository queries `akashic graph` and validates artifacts with `akashic lint --strict`.
+- **Workspace Rule Fallback (`AGENTS.md`)**: Document the requirement in your root agent instructions so any agent working in the repository queries `akashic graph` and validates artifacts with `akashic lint --strict`.
 - **Git Pre-commit Hook**: Add `akashic lint --strict` to verify artifact integrity on commit.
 
 ---
@@ -182,7 +182,7 @@ In this setup, `pr` coordinates two distinct deliverables:
 
 ### 5. Update Agent Guidelines
 
-Add the Pedroca Skills section to `AGENTS.md` (or `CLAUDE.md` / `GEMINI.md`):
+Add the Pedroca Skills section to `AGENTS.md` (or `CLAUDE.md`):
 
 ```markdown
 ## Pedroca Skills & Akashic Spine

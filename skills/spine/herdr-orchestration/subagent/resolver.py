@@ -1,7 +1,13 @@
 """Role routing resolver for Herdr subagents conforming to Spec 0003."""
 
+import os
 from dataclasses import dataclass
 from typing import ClassVar
+
+ROUTINE_MODEL = os.getenv("HERDR_MODEL_ROUTINE", "routine")
+BALANCED_MODEL = os.getenv("HERDR_MODEL_BALANCED", "balanced")
+ADVANCED_MODEL = os.getenv("HERDR_MODEL_ADVANCED", "advanced")
+FRONTIER_MODEL = os.getenv("HERDR_MODEL_FRONTIER", "frontier")
 
 
 class UnknownRoleError(Exception):
@@ -24,56 +30,56 @@ class RoleResolver:
     _ROLES: ClassVar[dict[str, RoleConfig]] = {
         "runner": RoleConfig(
             name="runner",
-            model="gemini-3.8-flash-low",
+            model=ROUTINE_MODEL,
             effort="low",
             tier="Routine Execution",
             is_frontier=False,
         ),
         "librarian": RoleConfig(
             name="librarian",
-            model="gemini-3.8-flash-low",
+            model=ROUTINE_MODEL,
             effort="low",
             tier="Routine Execution",
             is_frontier=False,
         ),
         "fixer": RoleConfig(
             name="fixer",
-            model="gemini-3.8-flash-medium",
+            model=BALANCED_MODEL,
             effort="medium",
             tier="Balanced Implementation & Delivery",
             is_frontier=False,
         ),
         "integrator": RoleConfig(
             name="integrator",
-            model="gemini-3.8-flash-medium",
+            model=BALANCED_MODEL,
             effort="medium",
             tier="Balanced Implementation & Delivery",
             is_frontier=False,
         ),
         "craftsman": RoleConfig(
             name="craftsman",
-            model="gemini-3.8-flash-high",
+            model=ADVANCED_MODEL,
             effort="high",
             tier="Advanced Implementation & Routing",
             is_frontier=False,
         ),
         "evaluator": RoleConfig(
             name="evaluator",
-            model="gemini-3.8-flash-high",
+            model=ADVANCED_MODEL,
             effort="high",
             tier="Advanced Implementation & Routing",
             is_frontier=False,
         ),
         "council": RoleConfig(
             name="council",
-            model="gemini-4-argon-high",
+            model=FRONTIER_MODEL,
             effort="high",
             tier="Exceptional Frontier Reasoning",
             is_frontier=True,
         ),
         "oracle": RoleConfig(
             name="oracle",
-            model="gemini-4-argon-high",
+            model=FRONTIER_MODEL,
             effort="high",
             tier="Exceptional Frontier Reasoning",
             is_frontier=True,

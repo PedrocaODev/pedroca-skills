@@ -20,15 +20,12 @@ Follow the guidelines in `writing-for-agents` for concise phrasing, progressive 
 
 Locate and read the primary logs for the target session. If the user does not specify a session ID, lane, or commit range, evaluate the current active session.
 
-- **Antigravity CLI / AGY Transcripts**:
-  - Current or past conversation transcripts at `<appDataDir>/brain/<conversation-id>/.system_generated/logs/transcript.jsonl` and `transcript_full.jsonl`.
-  - Global conversation records in `~/.gemini/history/`.
+- **Harness Session Transcripts & Logs**:
+  - Conversation transcripts, execution traces, or session logs in the active coding harness environment (e.g. `<appDataDir>/brain/<conversation-id>/.system_generated/logs/transcript.jsonl`, `~/.agents/history/`, or harness session directories).
 - **Herdr Worktrees / Lanes**:
   - Lane kickoff briefs at `/tmp/handoff-<session>-<lane>.md`.
   - Lane completion receipts at `/tmp/handoff-<session>-<lane>-result.md`.
   - Multiplexer pane scrollback or lane git commits (`git log -p`).
-- **Pi CLI Transcripts**:
-  - Session files at `~/.pi/agent/sessions/*/<session-id>.jsonl`.
 - **Git Workspace Evidence**:
   - Commits and diffs via `git log -n 5 --stat` and `git diff`.
   - Test run execution outputs, compiler errors, and linter receipts.
@@ -40,7 +37,7 @@ Evaluate session friction across these six categories:
 1. **Navigation & Pointers**:
    - How easily did the agent locate relevant files?
    - Were there hidden cross-module dependencies or unexpected coupling?
-   - Would intentional navigation pointers in `GEMINI.md` or `AGENTS.md` eliminate exploratory searches?
+   - Would intentional navigation pointers in `AGENTS.md` (or workspace instructions) eliminate exploratory searches?
    - Would deterministic Akashic Code Graph queries (`akashic graph query "<question>"`, `akashic graph path "<A>" "<B>"`) reduce directory traversal round-trips?
 
 2. **Automated Checks & Guardrails**:
@@ -55,15 +52,19 @@ Evaluate session friction across these six categories:
      - **Judgement calls** (cross-file architectural consistency, public API design, semantic clarity) belong in `CODING_STANDARDS.md` or architectural decision records in `docs/adr/`.
    - Never write a prose rule for a mechanical violation that a linter can enforce.
 
-4. **Steering Hygiene (`GEMINI.md` / `AGENTS.md`)**:
-   - Are instructions in `~/.gemini/GEMINI.md`, project `GEMINI.md`, or `AGENTS.md` bloated, redundant, or acting as no-ops?
+4. **Steering Hygiene (`AGENTS.md` / Workspace Rules)**:
+   - Are instructions in `AGENTS.md` or workspace rules bloated, redundant, or acting as no-ops?
    - Does an instruction fail to alter agent behavior compared to the default?
    - Can oversized instructions be moved down the information hierarchy into specialized skills or automated scripts?
 
 5. **Topology & Tool Economy**:
    - Did the primary orchestrator session maintain role separation (coordinating, researching, and planning without editing application code directly)?
    - Were code changes correctly delegated to `fixer` or `designer`?
-   - Were subagent invocations explicitly tiered (`flash_lite` for `runner`/`librarian`, `flash` for `fixer`/`integrator`, `pro` for `evaluator`/`craftsman`/`oracle`) rather than wasting tokens on `Model: "inherit"`?
+   - Were subagent invocations explicitly tiered according to generic capability tiers:
+     - Routine Execution tier (`runner`/`librarian`)
+     - Balanced Workhorse tier (`fixer`/`integrator`)
+     - Frontier Reasoning tier (`evaluator`/`craftsman`/`oracle`)
+     rather than wasting tokens or running inappropriate models?
    - Were tool calls efficient, or did the agent make repetitive, token-heavy calls?
 
 6. **Information Access & Architectural Seams**:
@@ -105,7 +106,7 @@ Place guidance in the correct tier of the information hierarchy:
 
 | File / Location | Primary Role | Scope & Guidance |
 |---|---|---|
-| `GEMINI.md` / `AGENTS.md` | Context steering & navigation | Loaded on every turn. Use sparingly. Limit to navigation pointers, essential tool routing, and non-negotiable project boundaries. |
+| `AGENTS.md` / Workspace Rules | Context steering & navigation | Loaded on every turn. Use sparingly. Limit to navigation pointers, essential tool routing, and non-negotiable project boundaries. |
 | `CODING_STANDARDS.md` | Reviewer standards | Read during review (`code-review`), not implementation. Keep focused on human judgement calls. If it exceeds 1,000 lines, split into topic docs with pointers. |
-| `docs/adr/`, `docs/specs/` | Architectural decisions & contracts | Canonical records of design choices and domain boundaries. Point to from `GEMINI.md` rather than inlining. |
+| `docs/adr/`, `docs/specs/` | Architectural decisions & contracts | Canonical records of design choices and domain boundaries. Point to from `AGENTS.md` rather than inlining. |
 | `skills/` | On-demand procedural workflows | Disclosed workflows loaded only when invoked or when trigger keywords match. Pushes operational load out of global steering. |

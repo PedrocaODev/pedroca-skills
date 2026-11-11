@@ -80,19 +80,19 @@ Within any given workspace, the active session acts as an orchestrator and **doe
 
 | Specialist Subagent | Lane Role | Default Model Tier | Primary Responsibilities |
 |---|---|---|---|
-| `fixer` | Bounded Implementation | `flash` (`gemini-3.8-flash-medium`) | Produces minimal targeted code diffs, bugfixes, and TDD slice implementations. |
-| `craftsman` | Advanced Implementation | `pro` (`gemini-3.8-flash-high`) | Complex refactors, state machine redesigns, architectural decoupling. |
-| `runner` | Verification Gate | `flash_lite` (`gemini-3.8-flash-low`) | Read-only deterministic test execution, build validation. Returns `VERDICT: PASSED\|FAILED\|BLOCKED`. |
-| `integrator` | Git Delivery Gate | `flash` (`gemini-3.8-flash-medium`) | Scoped Git status checks, staging, clean commit crafting, and branch delivery. |
-| `librarian` | Research & Docs | `flash_lite` (`gemini-3.8-flash-low`) | Fast Context7 MCP / documentation lookups. |
-| `evaluator` | Escalation Gatekeeper | `pro` (`gemini-3.8-flash-high`) | Read-only diagnostic triage after two failed implementation attempts. |
-| `oracle` | Architecture & RCA | `pro` (`gemini-4-argon-high`) | Deep root cause analysis, complex system modeling, frontier reasoning via Akashic MCP. |
-| `council` | Multi-Model Consensus | `pro` (`gemini-4-argon-high`) | Synthesizes opposing viewpoints on high-risk architectural trade-offs. |
+| `fixer` | Bounded Implementation | Balanced Workhorse Tier | Produces minimal targeted code diffs, bugfixes, and TDD slice implementations. |
+| `craftsman` | Advanced Implementation | Advanced Implementation Tier | Complex refactors, state machine redesigns, architectural decoupling. |
+| `runner` | Verification Gate | Routine Execution Tier | Read-only deterministic test execution, build validation. Returns `VERDICT: PASSED\|FAILED\|BLOCKED`. |
+| `integrator` | Git Delivery Gate | Balanced Workhorse Tier | Scoped Git status checks, staging, clean commit crafting, and branch delivery. |
+| `librarian` | Research & Docs | Routine Execution Tier | Fast Context7 MCP / documentation lookups. |
+| `evaluator` | Escalation Gatekeeper | Advanced Routing & Triage Tier | Read-only diagnostic triage after two failed implementation attempts. |
+| `oracle` | Architecture & RCA | Frontier Reasoning Tier | Deep root cause analysis, complex system modeling, frontier reasoning via Akashic MCP. |
+| `council` | Multi-Model Consensus | Frontier Reasoning Tier | Synthesizes opposing viewpoints on high-risk architectural trade-offs. |
 
 ### Model Tier Allocation & Escalation Protocol
-- **Tier 1 (Routine Execution)**: `gemini-3.8-flash-low` (`runner`, `librarian`) handles fast, lightweight checks.
-- **Tier 2 (Balanced Workhorse)**: `gemini-3.8-flash-medium` (`fixer`, `integrator`) and `gemini-3.8-flash-high` (`craftsman`, `evaluator`) handle code mutations and triage.
-- **Tier 3 (Exceptional Frontier Reasoning)**: `gemini-4-argon-high` (`oracle`, `council`) is reserved strictly for complex architectural deadlocks.
+- **Tier 1 (Routine Execution)**: Routine Execution Tier (`runner`, `librarian`) handles fast, lightweight checks.
+- **Tier 2 (Balanced Workhorse & Advanced Implementation)**: Balanced Workhorse Tier (`fixer`, `integrator`) and Advanced Implementation Tier (`craftsman`, `evaluator`) handle code mutations, triage, and complex refactors.
+- **Tier 3 (Exceptional Frontier Reasoning)**: Frontier Reasoning Tier (`oracle`, `council`) is reserved strictly for complex architectural deadlocks.
 - **10-Step Automatic Escalation Protocol**: Direct fixes are strictly capped at two attempts. If two consecutive `runner` checks fail, control automatically transfers to `evaluator` for root cause triage before invoking `oracle` or `craftsman`.
 
 ---
@@ -333,8 +333,8 @@ python3 skills/spine/to-tickets/scripts/compile_dag.py \
 ```
 
 ### 3. Harness Integration
-`pedroca-skills` integrates natively across Antigravity CLI, Cursor, Claude Code, and Herdr:
-- **Antigravity CLI**: Scans `~/.gemini/config/skills/*/SKILL.md` (symlinked directly to layered skills).
+`pedroca-skills` integrates natively across coding harnesses (such as Antigravity CLI, Cursor, Claude Code) and Herdr:
+- **Coding Harnesses**: Load skills directly or symlink them into your harness's configured skills directory (e.g. `${HOME}/.agents/skills` or repository `.agents/skills`).
 - **Herdr Multiplexer**: Interacts natively via `herdr-orchestration` to spawn parallel worktrees under repository spaces.
 - **npx skills**: Can be consumed or installed using standard skill discovery tools.
 

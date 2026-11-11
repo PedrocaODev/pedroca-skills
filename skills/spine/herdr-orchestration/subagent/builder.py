@@ -1,4 +1,4 @@
-"""Command builder for Herdr terminal multiplexing and Antigravity agent CLI operations."""
+"""Command builder for Herdr terminal multiplexing and generic Agent CLI operations."""
 
 import os
 
@@ -16,24 +16,25 @@ class CommandBuilder:
         extra_args: list[str] | None = None,
         skip_permissions: bool = True,
     ) -> list[str]:
-        """Build the command to launch an isolated Antigravity CLI subagent process in a Herdr pane.
+        """Build the command to launch an isolated agent CLI subagent process in a Herdr pane.
 
         Args:
             role_config: Subagent role configuration with model and effort settings.
             pane_id: Herdr pane ID where the agent process will run.
-            extra_args: Optional extra arguments to pass to the agy process after '--'.
+            extra_args: Optional extra arguments to pass to the agent process after '--'.
             skip_permissions: Whether to append '--dangerously-skip-permissions'.
 
         Returns:
             Command argument list suitable for subprocess execution.
         """
+        agent_kind = os.getenv("HERDR_AGENT_KIND", "agent")
         cmd = [
             "herdr",
             "agent",
             "start",
             role_config.name,
             "--kind",
-            "agy",
+            agent_kind,
             "--pane",
             pane_id,
             "--",
