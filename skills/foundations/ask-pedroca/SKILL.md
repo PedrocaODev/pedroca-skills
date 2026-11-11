@@ -58,6 +58,8 @@ Ongoing architectural hygiene and code health:
 
 - **`improve-codebase-architecture`** — Codebase deepening and friction reduction.
   Scans the repository for shallow modules, coupling leaks, and architectural friction to improve testability and AI-navigability. Uses deterministic Akashic Code Graph tools (`graph_god_nodes`, `graph_get_community`, `graph_blast_radius`, `akashic graph surprising`) as its primary discovery step before organic file exploration. Generates an interactive visual HTML report with before/after diagrams and walks through candidate refactors via structured grilling.
+- **Single-session post-mortem and environment tuning** → **`retro`**.
+  Conducts a focused retrospective on a coding session (Antigravity CLI transcript, Herdr lane handoff, or Git history). Diagnoses immediate friction, auditing navigation pointers, mechanical guardrails, reviewer standards in `CODING_STANDARDS.md`, steering files (`GEMINI.md`), tool economy, and information access to tune future agent runs.
 
 ---
 

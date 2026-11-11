@@ -2,7 +2,7 @@
 
 > **The Agentic Engineering Skills Framework for Autonomous Coding, Multi-Lane Herdr Worktrees, and Akashic Knowledge Graphs.**
 
-`pedroca-skills` is a production-grade, battle-tested system of 71 composable agent skills designed for autonomous AI software engineering. It enforces rigorous software craft: deterministic verification gates, typed knowledge graphs (Open Knowledge Format v0.2), multi-lane parallel worktree dispatch, test-driven development (TDD), and disciplined subagent role boundaries.
+`pedroca-skills` is a production-grade, battle-tested system of 73 composable agent skills designed for autonomous AI software engineering. It enforces rigorous software craft: deterministic verification gates, typed knowledge graphs (Open Knowledge Format v0.2), multi-lane parallel worktree dispatch, test-driven development (TDD), and disciplined subagent role boundaries.
 
 ---
 
@@ -170,7 +170,7 @@ akashic lint --strict --vault docs
 
 ## Layer Catalog
 
-All 71 skills are organized into 8 functional layers under `skills/`:
+All 73 skills are organized into 8 functional layers under `skills/`:
 
 ### 1. Spine (Core Lifecycle)
 *Canonical end-to-end delivery workflow from interview to review.*
@@ -235,6 +235,8 @@ All 71 skills are organized into 8 functional layers under `skills/`:
 | `wait-what` | `skills/engineering/wait-what` | Pauses execution when encountering suspicious patterns, asking clarifying sanity checks. |
 | `writing-for-agents` | `skills/engineering/writing-for-agents` | Authoring guidelines for high-precision, unambiguous prompt contracts and agent specifications. |
 | `reflect` | `skills/engineering/reflect` | Analyzes recent workflows, extracts recurring patterns, and suggests reusable agent skills. |
+| `retro` | `skills/engineering/retro` | Conducts a retrospective on a coding session, suggesting environment, guardrail, and steering improvements. |
+| `pr` | `skills/engineering/pr` | Environment-agnostic review submission and evidence formatting for Gerrit, GitHub PRs, and GitLab MRs. |
 
 ### 6. Android (Mobile & Embedded Systems)
 *Production Android, Kotlin Multiplatform, Jetpack Compose, and system-level engineering.*
