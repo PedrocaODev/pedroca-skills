@@ -24,9 +24,10 @@
   - [7. Design (Frontend, Systems & Visual QA)](#7-design-frontend-systems--visual-qa)
   - [8. Utilities (Parsing & Analysis Helpers)](#8-utilities-parsing--analysis-helpers)
 - [Installation & Quickstart](#installation--quickstart)
-  - [1. Navigate with ask-pedroca](#1-navigate-with-ask-pedroca)
-  - [2. Onboard a Repository](#2-onboard-a-repository)
-  - [3. Harness Integration](#3-harness-integration)
+  - [1. Install via Skills CLI (skill.sh)](#1-install-via-skills-cli-skillsh)
+  - [2. Navigate with ask-pedroca](#2-navigate-with-ask-pedroca)
+  - [3. Onboard a Repository](#3-onboard-a-repository)
+  - [4. Harness Integration](#4-harness-integration)
 - [Verification Gates & Test Suite](#verification-gates--test-suite)
 - [Standards & Conventions](#standards--conventions)
 
@@ -296,14 +297,21 @@ All 73 skills are organized into 8 functional layers under `skills/`:
 
 ## Installation & Quickstart
 
-### 1. Navigate with ask-pedroca
+### 1. Install via Skills CLI (skill.sh)
+Install `pedroca-skills` into your project or agent environment using Vercel's [skills.sh](https://skills.sh):
+
+```bash
+npx skills add PedrocaODev/pedroca-skills
+```
+
+### 2. Navigate with ask-pedroca
 When uncertain where to start, invoke `ask-pedroca`:
 ```bash
 /ask-pedroca
 ```
 It interrogates your intent and routes you to the exact skill or workflow required.
 
-### 2. Onboard a Repository
+### 3. Onboard a Repository
 To initialize a project with the Pedroca Skills framework:
 ```bash
 python3 skills/foundations/setup-pedroca-skills/scripts/okf_bootstrap.py init-config --repo-root . --vault-path docs
@@ -332,11 +340,11 @@ python3 skills/spine/to-tickets/scripts/compile_dag.py \
   --output /tmp/compiled_dag.json
 ```
 
-### 3. Harness Integration
+### 4. Harness Integration
 `pedroca-skills` integrates natively across coding harnesses (such as Antigravity CLI, Cursor, Claude Code) and Herdr:
+- **Skills CLI (skill.sh)**: Install directly into your agent environment using `npx skills add PedrocaODev/pedroca-skills`.
 - **Coding Harnesses**: Load skills directly or symlink them into your harness's configured skills directory (e.g. `${HOME}/.agents/skills` or repository `.agents/skills`).
 - **Herdr Multiplexer**: Interacts natively via `herdr-orchestration` to spawn parallel worktrees under repository spaces.
-- **npx skills**: Can be consumed or installed using standard skill discovery tools.
 
 ---
 
