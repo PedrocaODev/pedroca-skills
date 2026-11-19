@@ -82,7 +82,7 @@ class TestBuildLanePrompt:
         assert "Read the kickoff brief" in prompt
         assert "strictly adhere to the /implement workflow" in prompt
         assert "TDD slices, regular typechecking/tests, and pre-commit self-review with /code-review" in prompt
-        assert "commit work to branch lane/auth-api" in prompt
+        assert "commit work to branch lane/auth-api via integrator using /pr" in prompt
         assert "write the completion receipt to /tmp/handoff-123456-auth-api-result.md" in prompt
         assert prompt.endswith("Reply when complete.")
 
@@ -98,7 +98,7 @@ class TestBuildLanePrompt:
         )
         assert not prompt.startswith("/implement")
         assert prompt.startswith("Execute the task specified in /tmp/handoff-123456-api-docs.md.")
-        assert "commit work to branch lane/api-docs" in prompt
+        assert "commit work to branch lane/api-docs via integrator using /pr" in prompt
         assert "write the completion receipt to /tmp/handoff-123456-api-docs-result.md" in prompt
         assert prompt.endswith("Reply when complete.")
 
@@ -141,6 +141,7 @@ class TestBuildLaneBrief:
         assert "You MUST declare `WORKFLOW: /implement` in your completion receipt." in brief
         assert "pytest tests/test_auth.py" in brief
         assert "1. Commit all completed work to branch `lane/auth-system-auth-api`." in brief
+        assert "Delegate staging, commit formatting, and tracker evidence to `integrator` using `/pr`." in brief
         assert "`WORKFLOW`: `/implement` (must declare implement workflow)" in brief
 
     def test_non_implementation_lane_brief_root_phase(self) -> None:

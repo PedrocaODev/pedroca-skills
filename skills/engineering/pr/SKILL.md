@@ -1,6 +1,6 @@
 ---
 name: pr
-description: "Environment-agnostic code review and verification evidence submission skill for Gerrit changes, GitHub PRs, GitLab MRs, and issue trackers like Jira, Linear, or Akashic Vault."
+description: "Commit, amend, merge, push, or submit code reviews and verification evidence. Use before any git commit, PR/MR creation, or Gerrit push across Vault, GitHub, GitLab, Gerrit, Jira, and Linear adapters."
 ---
 
 # Code Review & Evidence Submission (`pr`)
@@ -24,15 +24,17 @@ The review process collaborates across three specialist agent roles:
 ┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐
 │     runner      │ ───►  │       pr        │ ───►  │   integrator    │
 │                 │       │                 │       │                 │
-│ executes tests, │       │ formats Package │       │ amends commit,  │
-│ captures logs & │       │ A (review) and  │       │ pushes change,  │
-│ visual evidence │       │ Package B (Jira)│       │ posts comments  │
+│ executes tests, │       │ formats Package │       │ stages & commits│
+│ captures logs & │       │ A (review) and  │       │ or amends, pushes│
+│ visual evidence │       │ Package B (track│       │ & posts evidence│
 └─────────────────┘       └─────────────────┘       └─────────────────┘
 ```
 
 1. **`runner`**: Executes verification commands, Stage 1 tests, or visual captures, returning evidence with `VERDICT: PASSED`.
 2. **`pr`**: Analyzes the diff, test evidence, and issue references. Formats Package A and Package B according to the configured review and tracker adapters.
-3. **`integrator`**: Applies the formatted commit message (`git commit --amend`), preserves the Gerrit `Change-Id`, pushes to the review remote (`git review` or `git push`), and posts the evidence package to the issue tracker.
+3. **`integrator`**: Records Package B in the configured tracker (or Vault ticket), stages strictly scoped files, creates or amends the commit (`git commit` or `git commit --amend` while preserving any Gerrit `Change-Id`), and pushes or opens the PR/MR when configured and requested.
+
+When `/pr` is invoked directly on uncommitted changes or a commit request, delegate delivery to `integrator` (or execute the `integrator` delivery step directly if already running inside `integrator`) so changes are committed rather than left dirty.
 
 ---
 
@@ -170,9 +172,9 @@ glab mr create \
 ### 3.4 Vault / Local (`adapter = "vault"`)
 
 For local-only development or repos without a hosted Git review platform:
-- Formats a conventional commit message.
-- Emits a completion handoff document (`/tmp/handoff-<session>-<topic>-result.md`).
-- Updates the ticket state in `docs/tickets/<topic>/<NN>-<slug>.md`.
+- **Package A (Commit Message)**: Format a conventional subject (`<type>(<scope>): <summary>`), blank line, Motivation and Solution summary (with a plain-text diff-sketch or file tree for multi-file changes), `Merge Danger` (`Door:` and `Blast Radius:`), and `Refs:` / `Ticket:` footer.
+- **Package B (Vault Ticket)**: Update `## Verification Evidence` in `docs/tickets/<topic>/<NN>-<slug>.md` before committing so the evidence lands in the commit.
+- **Delivery**: Stage strictly scoped files and commit via `integrator` (never `git add .` or `git add -A`). Emit `/tmp/handoff-<session>-<topic>-result.md` when closing a session or Herdr Lane.
 
 ---
 

@@ -322,6 +322,7 @@ Before declaring completion, run and pass within this worktree:
 
 ## Completion Protocol
 1. Commit all completed work to branch `<LANE_BRANCH>`.
+   - Delegate staging, commit formatting, and tracker evidence to `integrator` using `/pr`.
 2. Write a completion receipt to `/tmp/handoff-<SESSION_ID>-<LANE>-result.md` adhering to the required schema:
    - `VERDICT`: `PASSED` or `FAILED`
    - `WORKFLOW`: Declared workflow executed (mandatory `WORKFLOW: /implement` for implementation lanes)
@@ -338,9 +339,9 @@ Submit work prompts to all lanes in the active phase simultaneously adhering to 
 ```bash
 # Conditionally prefix with /implement for implementation lanes
 if [ "$LANE_TYPE" = "implementation" ] || echo "$REQUIRED_SKILLS" | grep -qw "implement"; then
-  PROMPT="/implement Execute the task specified in /tmp/handoff-${SESSION_ID}-${LANE}.md. Read the kickoff brief, strictly adhere to the /implement workflow (TDD, regular typechecking, and pre-commit code review), implement changes within your assigned file boundaries, execute Stage 1 self-verification, commit your work to branch $(git rev-parse --abbrev-ref HEAD), and write the completion receipt to /tmp/handoff-${SESSION_ID}-${LANE}-result.md. Reply when complete."
+  PROMPT="/implement Execute the task specified in /tmp/handoff-${SESSION_ID}-${LANE}.md. Read the kickoff brief, strictly adhere to the /implement workflow (TDD, regular typechecking, and pre-commit code review), implement changes within your assigned file boundaries, execute Stage 1 self-verification, commit your work to branch $(git rev-parse --abbrev-ref HEAD) via integrator using /pr, and write the completion receipt to /tmp/handoff-${SESSION_ID}-${LANE}-result.md. Reply when complete."
 else
-  PROMPT="Execute the task specified in /tmp/handoff-${SESSION_ID}-${LANE}.md. Read the kickoff brief, execute changes within your assigned file boundaries, execute Stage 1 self-verification, commit your work to branch $(git rev-parse --abbrev-ref HEAD), and write the completion receipt to /tmp/handoff-${SESSION_ID}-${LANE}-result.md. Reply when complete."
+  PROMPT="Execute the task specified in /tmp/handoff-${SESSION_ID}-${LANE}.md. Read the kickoff brief, execute changes within your assigned file boundaries, execute Stage 1 self-verification, commit your work to branch $(git rev-parse --abbrev-ref HEAD) via integrator using /pr, and write the completion receipt to /tmp/handoff-${SESSION_ID}-${LANE}-result.md. Reply when complete."
 fi
 
 herdr agent prompt "$LANE" "$PROMPT" --wait --timeout 600000 &
@@ -483,8 +484,8 @@ npm run test:integration
 npm test
 ```
 
-- If Stage 2 passes: Integration is complete and verified.
-- If Stage 2 fails: Inspect the regression, identify the conflicting lane contracts, and apply a targeted fix commit on the integration branch.
+- If Stage 2 passes: Delegate final integration commit, PR/MR submission, and tracker evidence updates to `integrator` using `/pr`.
+- If Stage 2 fails: Inspect the regression, identify the conflicting lane contracts, apply a targeted fix, re-run Stage 2 verification, and commit via `integrator` using `/pr`.
 
 ---
 

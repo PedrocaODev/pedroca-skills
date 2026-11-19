@@ -106,12 +106,13 @@ Before committing changes, execute a pre-commit review using `/code-review` prin
 
 ## Stage 5: Git Delivery Gate (`integrator`)
 
-1. **Delegate Delivery to `integrator`**:
-   - Git operations (staging, branching, committing) must be delegated to the `integrator` subagent (Tier: Balanced Delivery Tier).
-2. **Scoped Staging & Commit**:
-   - Scope staging strictly to files within the assigned file boundaries.
-   - Never use blanket `git add .` or commit untracked foreign artifacts.
-   - Create conventional commit messages detailing the implemented scope (e.g. `feat(scope): concise summary`).
+1. **Delegate Delivery to `integrator` with `/pr`**:
+   - Delegate all Git delivery operations (staging, committing, amending, pushing, PR/MR creation) to the `integrator` subagent (Tier: Balanced Delivery Tier).
+   - Pass the `runner` `VERDICT: PASSED` evidence, allowed file boundaries, and originating ticket/spec path so `integrator` executes the `/pr` workflow.
+2. **Scoped Staging & `/pr` Packages**:
+   - `integrator` resolves `[workflow.review]` and `[workflow.tracker]` from `config/akashic.toml` (or workspace heuristics) via `/pr`.
+   - Stage strictly within assigned file boundaries (never `git add .` or `git add -A`).
+   - Record Package B verification evidence in the configured tracker (or Vault ticket) and commit/submit Package A.
 
 ---
 

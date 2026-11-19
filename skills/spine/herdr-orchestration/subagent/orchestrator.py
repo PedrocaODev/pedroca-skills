@@ -73,14 +73,14 @@ class LaneOrchestrator:
                 f"Read the kickoff brief, strictly adhere to the /implement workflow "
                 f"(TDD slices, regular typechecking/tests, and pre-commit self-review with /code-review), "
                 f"implement changes within assigned file boundaries, "
-                f"execute Stage 1 self-verification, commit work to branch {branch}, "
+                f"execute Stage 1 self-verification, commit work to branch {branch} via integrator using /pr, "
                 f"and write the completion receipt to {result_file}. Reply when complete."
             )
         else:
             return (
                 f"Execute the task specified in {handoff_file}. "
                 f"Read the kickoff brief, execute changes within assigned file boundaries, "
-                f"execute Stage 1 self-verification, commit work to branch {branch}, "
+                f"execute Stage 1 self-verification, commit work to branch {branch} via integrator using /pr, "
                 f"and write the completion receipt to {result_file}. Reply when complete."
             )
 
@@ -172,6 +172,7 @@ class LaneOrchestrator:
             "",
             "## Completion Protocol",
             f"1. Commit all completed work to branch `{branch}`.",
+            "   - Delegate staging, commit formatting, and tracker evidence to `integrator` using `/pr`.",
             f"2. Write a completion receipt to `/tmp/handoff-{session_id}-{lane.name}-result.md` adhering to the required schema:",
             "   - `VERDICT`: `PASSED` or `FAILED`",
         ])

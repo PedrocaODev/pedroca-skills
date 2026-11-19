@@ -18,7 +18,7 @@ Watch an existing pull request through CI, keep the loop moving, and only merge 
 - `runner`: run and interpret verification.
 - `oracle`: review diffs and proposed fixes.
 - `fixer`: implement bounded fixes.
-- `integrator`: create the PR, push changes, and hand off the watch loop here.
+- `integrator`: create the PR and push changes using `/pr`, then hand off the watch loop here.
 
 # Workflow
 
