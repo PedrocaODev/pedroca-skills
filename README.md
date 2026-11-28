@@ -225,7 +225,7 @@ All 73 skills are organized into 8 functional layers under `skills/`:
 | `clonedeps` | `skills/engineering/clonedeps` | Clones external dependency repositories into an isolated local workspace for direct source inspection. |
 | `babysit-pr` | `skills/engineering/babysit-pr` | Monitors CI runs, diagnoses test failures, routes automated fixes, and auto-merges on green. |
 | `resolving-merge-conflicts` | `skills/engineering/resolving-merge-conflicts` | Resolves complex Git merge, rebase, and cherry-pick conflicts safely without regressions. |
-| `setup-pre-commit` | `skills/engineering/setup-pre-commit` | Configures Husky pre-commit hooks, lint-staged, code formatters, and fast test gates. |
+| `setup-pre-commit` | `skills/engineering/setup-pre-commit` | Wires any language's format, lint, static-analysis, typecheck, and test gates into git hooks (pre-commit framework, Husky, or lefthook). |
 | `handoff` | `skills/engineering/handoff` | Serializes in-flight conversational and technical context into portable Markdown handoff files. |
 | `herdr` | `skills/engineering/herdr` | Controls Herdr terminal multiplexer workspaces, panes, commands, and multi-agent coordination. |
 | `wizard` | `skills/engineering/wizard` | Generates interactive bash wizards that guide humans through privileged credentials or cloud operations. |
